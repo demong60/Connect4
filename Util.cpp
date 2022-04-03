@@ -36,6 +36,9 @@ int Util::UtilityFunction(Game &game, int move, char symbol) {
         return (symbol == COMPUTER) ? 512 : -512;
 
     // Check for draw - implement counter
+    if(game.depth == 41)
+	return 0;
+
     int total = (symbol == COMPUTER ? 16 : -16);
 
     // Check columns
