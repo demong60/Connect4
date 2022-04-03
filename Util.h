@@ -7,15 +7,19 @@ using namespace std;
 #define CROSS 'X'
 #define CIRCLE 'O'
 
+#define MAX_DEPTH 5
+
 #include "Game.h"
 #include "Algorithms.h"
 
-namespace Util
-{
-    pair<int, int> CountSegments(array<array<char, WIDTH>, HEIGHT> &board, pair<int, int> pos, pair<int, int> dir);
-    pair<int, int> count_cols(array<array<char, WIDTH>, HEIGHT> &board);
-    bool MakeMove(int col, Game &game, char symbol);
-    void PrintGame(Game &game);
-    void CreateChildren(Game &game, vector<Game> &children);
-    bool CheckForWin(Game &game, int col, char symbol);
-}
+namespace Util {
+
+pair<int, int> CountSegments(array<array<char, WIDTH>, HEIGHT> &board, pair<int, int> pos, pair<int, int> dir);
+pair<int, int> count_cols(array<array<char, WIDTH>, HEIGHT> &board);
+bool MakeMove(int col, Game &game, char symbol);
+void PrintGame(Game &game);
+void CreateChildren(Game &game, vector<Game> &children, char symbol);
+bool CheckForWin(Game &game, int col, char symbol);
+int UtilityFunction(Game &game, int move, char symbol);
+int GetValueForSegment(pair<int, int> segment_results);
+}  // namespace Util

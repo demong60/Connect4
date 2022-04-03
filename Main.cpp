@@ -43,7 +43,7 @@ int main()
 
     
 
-    // pair<int, int> res = Util::CountSegments(board, {0, 1}, down_right); // Função principal que conta quantos X's e O's estão na linha / coluna / diagonal da posição entre aspas 
+    // pair<int, int> res = Util::CountSegments(board, {0, 1}, move_down_right); // Função principal que conta quantos X's e O's estão na linha / coluna / diagonal da posição entre aspas 
     pair<int, int> res_cols = Util::count_cols(board);
     cout << "nas colunas: " << res_cols.first << ' ' << res_cols.second << '\n';
 

@@ -1,52 +1,101 @@
 #include "Util.h"
 
-pair<int, int> down_right = {1, 1}; // Percorrer a diagonal no sentido sudeste
-pair<int, int> up_right = {-1, 1};  // Percorrer a diagonal no sentido nordeste
-pair<int, int> right = {0, 1};      // Percorrer uma linha no sentido este
-pair<int, int> down = {1, 0};       // Percorrer uma coluna no sentido sul
+pair<int, int> move_down_right = {1, 1};  // Percorrer a diagonal no sentido sudeste
+pair<int, int> move_up_right = {-1, 1};   // Percorrer a diagonal no sentido nordeste
+pair<int, int> move_right = {0, 1};       // Percorrer uma linha no sentido este
+pair<int, int> move_down = {1, 0};        // Percorrer uma coluna no sentido sul
 
-
-pair<int, int> Util::CountSegments(array<array<char, WIDTH>, HEIGHT> &board, pair<int, int> pos, pair<int, int> dir){
-    int incy = dir.first;
-    int incx = dir.second;
-    pair<int, int> cnt = {0, 0};
-    while(true){
-        if(pos.first >= HEIGHT || pos.second >= WIDTH || pos.first < 0 || pos.second < 0){
+pair<int, int> Util::CountSegments(array<array<char, WIDTH>, HEIGHT> &board, pair<int, int> position, pair<int, int> direction) {
+    int increment_y = direction.first;
+    int increment_x = direction.second;
+    // {X, O}
+    pair<int, int> count = {0, 0};
+    while (true) {
+        if (position.first >= HEIGHT || position.second >= WIDTH || position.first < 0 || position.second < 0) {
             break;
         }
-        cnt.first += board[pos.first][pos.second] == CROSS;
-        cnt.second += board[pos.first][pos.second] == CIRCLE;
-        pos.first += incy;
-        pos.second += incx;
+        count.first += board[position.first][position.second] == CROSS;
+        count.second += board[position.first][position.second] == CIRCLE;
+        position.first += increment_y;
+        position.second += increment_x;
     }
-    return cnt;
+    return count;
 }
 
-pair<int, int> Util::count_cols(array<array<char, WIDTH>, HEIGHT> &board){
+pair<int, int> Util::count_cols(array<array<char, WIDTH>, HEIGHT> &board) {
     pair<int, int> ans = {0, 0};
-    for(int i=0; i<WIDTH; ++i){
-        pair<int, int> cur = CountSegments(board, make_pair(0, i), down);
+    for (int i = 0; i < WIDTH; ++i) {
+        pair<int, int> cur = CountSegments(board, make_pair(0, i), move_down);
         ans.first += cur.first;
         ans.second += cur.second;
     }
     return ans;
 }
 
+int Util::GetValueForSegment(pair<int, int> segment_results) {
+    array<int, 3> map = {1, 10, 50};
 
-bool Util::MakeMove(int col, Game &game, char symbol)
-{
-    if (game.positionsPlayed[col] == 0 || col < 0 || col >= WIDTH)
+    if (segment_results.first > 0 && segment_results.second > 0)
+        return 0;
+
+    return segment_results.first > 0 ? (map[segment_results.first - 1]) : (map[segment_results.second - 1] * -1);
+}
+
+int Util::UtilityFunction(Game &game, int move, char symbol) {
+    if (CheckForWin(game, move, symbol))
+        return (symbol == CROSS) ? 512 : -512;
+
+    // Check for draw - implement counter
+    int total = (symbol == CROSS ? 16 : -16);
+
+    // Check columns
+    for (int col = 0; col < WIDTH; ++col) {
+        pair<int, int> cur = CountSegments(game.board, {0, col}, move_down);
+        total += GetValueForSegment(cur);
+    }
+
+    // Check rows
+    for (int row = 0; row < HEIGHT; ++row) {
+        pair<int, int> cur = CountSegments(game.board, {row, 0}, move_right);
+        total += GetValueForSegment(cur);
+    }
+
+    // Primary Diagonal
+    for (int row = 0; row < HEIGHT; ++row) {
+        pair<int, int> cur = CountSegments(game.board, {row, 0}, move_down_right);
+        total += GetValueForSegment(cur);
+    }
+    for (int col = 1; col < WIDTH; ++col) {
+        pair<int, int> cur = CountSegments(game.board, {0, col}, move_down_right);
+        total += GetValueForSegment(cur);
+    }
+
+    // Secondary Diagonal
+    for (int row = HEIGHT - 1; row >= 0; --row) {
+        pair<int, int> cur = CountSegments(game.board, {row, 0}, move_up_right);
+        total += GetValueForSegment(cur);
+    }
+    for (int col = 1; col < WIDTH; ++col) {
+        pair<int, int> cur = CountSegments(game.board, {HEIGHT - 1, col}, move_up_right);
+        total += GetValueForSegment(cur);
+    }
+
+    return total;
+}
+
+bool Util::MakeMove(int col, Game &game, char symbol) {
+    if (game.positions_played[col] == 0 || col < 0 || col >= WIDTH)
         return false;
-    game.board[--game.positionsPlayed[col]][col] = symbol;
-    PrintGame(game);
+
+    game.board[--game.positions_played[col]][col] = symbol;
+
     return true;
 }
 
-bool Util::CheckForWin(Game &game, int col, char symbol)
-{
+bool Util::CheckForWin(Game &game, int col, char symbol) {
     // Check horizontal
     int sum = 1;
-    int currentRow = game.positionsPlayed[col];
+    int currentRow = game.positions_played[col];
     for (int colI = 1; colI <= 3 && col - colI >= 0; colI++)
         if (game.board[currentRow][col - colI] == symbol)
             sum++;
@@ -101,13 +150,10 @@ bool Util::CheckForWin(Game &game, int col, char symbol)
     return sum == 4;
 }
 
-void Util::PrintGame(Game &game)
-{
+void Util::PrintGame(Game &game) {
     int n = system("clear");
-    for (int row = 0; row < HEIGHT; row++)
-    {
-        for (int col = 0; col < WIDTH; col++)
-        {
+    for (int row = 0; row < HEIGHT; row++) {
+        for (int col = 0; col < WIDTH; col++) {
             if (col == 0)
                 cout << "| ";
             cout << game.board[row][col] << " | ";
@@ -116,14 +162,16 @@ void Util::PrintGame(Game &game)
     }
 }
 
-void Util::CreateChildren(Game &game, vector<Game> &children)
-{
-    for (int i = 0; i < WIDTH; i++)
-    {
-        if (game.positionsPlayed[i] == 0)
+void Util::CreateChildren(Game &game, vector<Game> &children, char symbol) {
+    for (int i = 0; i < WIDTH; i++) {
+        if (game.positions_played[i] == 0)
             continue;
         Game child = game;
-        MakeMove(i, child, 'X');
-        children.push_back(child);
+        child.depth++;
+        if (MakeMove(i, child, symbol)) {
+            if (child.depth == MAX_DEPTH)
+                child.utility_value = Util::UtilityFunction(child, i, symbol);
+            children.push_back(child);
+        }
     }
 }
