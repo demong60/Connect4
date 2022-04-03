@@ -1,6 +1,7 @@
 #include "Util.h"
 
-int main() {
+int main()
+{
     // cout << "Cross starts: \n";
     // Game game;
     // int lastPlayed;
@@ -21,17 +22,16 @@ int main() {
 
     srand(time(NULL));
     array<array<char, WIDTH>, HEIGHT> board;
-    for (int i = 0; i < HEIGHT; ++i) {
-        for (int j = 0; j < WIDTH; ++j) {
-            board[i][j] = (rand() % 2 == 0 ? CROSS : CIRCLE);
+    for(int i=0; i<HEIGHT; ++i){
+        for(int j=0; j<WIDTH; ++j){
+            board[i][j] = (rand()%2 == 0 ? CROSS : CIRCLE);
         }
     }
 
-    for (auto elem : board) {
-        for (auto x : elem) {
+    for(auto elem : board){
+        for(auto x : elem){
             cout << x << ' ';
-        }
-        cout << '\n';
+        } cout << '\n';
     }
 
     // 1 0 -> Ver linha a linha
@@ -41,7 +41,10 @@ int main() {
     //     cout << "Linha " << i << ": " << cur_res.first << ' ' << cur_res.second << '\n';
     // }
 
-    // pair<int, int> res = Util::CountSegments(board, {0, 1}, down_right); // Função principal que conta quantos X's e O's estão na linha / coluna / diagonal da posição entre aspas
+    
+
+    // pair<int, int> res = Util::CountSegments(board, {0, 1}, down_right); // Função principal que conta quantos X's e O's estão na linha / coluna / diagonal da posição entre aspas 
     pair<int, int> res_cols = Util::count_cols(board);
     cout << "nas colunas: " << res_cols.first << ' ' << res_cols.second << '\n';
+
 }
