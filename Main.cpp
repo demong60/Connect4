@@ -1,5 +1,9 @@
 #include "Util.h"
 
+int OlaMarco(){
+    return 5;
+}
+
 int main() {
     // cout << "Cross starts: \n";
     // Game game;
