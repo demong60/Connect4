@@ -7,13 +7,13 @@ using namespace std;
 #define CROSS 'X'
 #define CIRCLE 'O'
 
-#include "Game.h"
 #include "Algorithms.h"
+#include "Game.h"
 
-namespace Util
-{
-    bool MakeMove(int col, Game &game, char symbol);
-    void PrintGame(Game &game);
-    void CreateChildren(Game &game, vector<Game> &children);
-    bool CheckForWin(Game &game, int col, char symbol);
-}
+namespace Util {
+bool MakeMove(int col, Game &game, char symbol);
+void PrintGame(Game &game);
+void CreateChildren(Game &game, vector<Game> &children);
+bool CheckForWin(Game &game, int col, char symbol);
+int UtilityFunction(Game &game, char symbol);
+}  // Namespace Util

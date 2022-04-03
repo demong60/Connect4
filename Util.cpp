@@ -1,7 +1,6 @@
 #include "Util.h"
 
-bool Util::MakeMove(int col, Game &game, char symbol)
-{
+bool Util::MakeMove(int col, Game &game, char symbol) {
     if (game.positionsPlayed[col] == 0 || col < 0 || col >= WIDTH)
         return false;
     game.board[--game.positionsPlayed[col]][col] = symbol;
@@ -9,8 +8,7 @@ bool Util::MakeMove(int col, Game &game, char symbol)
     return true;
 }
 
-bool Util::CheckForWin(Game &game, int col, char symbol)
-{
+bool Util::CheckForWin(Game &game, int col, char symbol) {
     // Check horizontal
     int sum = 1;
     int currentRow = game.positionsPlayed[col];
@@ -68,13 +66,10 @@ bool Util::CheckForWin(Game &game, int col, char symbol)
     return sum == 4;
 }
 
-void Util::PrintGame(Game &game)
-{
+void Util::PrintGame(Game &game) {
     int n = system("clear");
-    for (int row = 0; row < HEIGHT; row++)
-    {
-        for (int col = 0; col < WIDTH; col++)
-        {
+    for (int row = 0; row < HEIGHT; row++) {
+        for (int col = 0; col < WIDTH; col++) {
             if (col == 0)
                 cout << "| ";
             cout << game.board[row][col] << " | ";
@@ -83,14 +78,28 @@ void Util::PrintGame(Game &game)
     }
 }
 
-void Util::CreateChildren(Game &game, vector<Game> &children)
-{
-    for (int i = 0; i < WIDTH; i++)
-    {
+void Util::CreateChildren(Game &game, vector<Game> &children) {
+    for (int i = 0; i < WIDTH; i++) {
         if (game.positionsPlayed[i] == 0)
             continue;
         Game child = game;
-        MakeMove(i, child, 'X');
+        MakeMove(i, child, CROSS);
+
+        // Check if child.depth >= MAX_DEPTH
+        // if it is callUtilityFunction on child
         children.push_back(child);
     }
+}
+
+int Util::UtilityFunction(Game &game, int last_played, char last_played_symbol) {
+    int game_utility = 0;
+    if (CheckForWin(game, last_played, last_played_symbol))
+        if (last_played_symbol == CIRCLE)
+            return -512;
+        else
+            return 512;
+    else
+        return 0;
+
+    
 }
