@@ -4,8 +4,8 @@
 using namespace std;
 #define WIDTH 7
 #define HEIGHT 6
-#define CROSS 'X'
-#define CIRCLE 'O'
+#define COMPUTER 'X'
+#define PLAYER 'O'
 
 #define MAX_DEPTH 5
 

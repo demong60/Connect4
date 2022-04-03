@@ -14,22 +14,12 @@ pair<int, int> Util::CountSegments(array<array<char, WIDTH>, HEIGHT> &board, pai
         if (position.first >= HEIGHT || position.second >= WIDTH || position.first < 0 || position.second < 0) {
             break;
         }
-        count.first += board[position.first][position.second] == CROSS;
-        count.second += board[position.first][position.second] == CIRCLE;
+        count.first += board[position.first][position.second] == COMPUTER;
+        count.second += board[position.first][position.second] == PLAYER;
         position.first += increment_y;
         position.second += increment_x;
     }
     return count;
-}
-
-pair<int, int> Util::count_cols(array<array<char, WIDTH>, HEIGHT> &board) {
-    pair<int, int> ans = {0, 0};
-    for (int i = 0; i < WIDTH; ++i) {
-        pair<int, int> cur = CountSegments(board, make_pair(0, i), move_down);
-        ans.first += cur.first;
-        ans.second += cur.second;
-    }
-    return ans;
 }
 
 int Util::GetValueForSegment(pair<int, int> segment_results) {
@@ -43,10 +33,10 @@ int Util::GetValueForSegment(pair<int, int> segment_results) {
 
 int Util::UtilityFunction(Game &game, int move, char symbol) {
     if (CheckForWin(game, move, symbol))
-        return (symbol == CROSS) ? 512 : -512;
+        return (symbol == COMPUTER) ? 512 : -512;
 
     // Check for draw - implement counter
-    int total = (symbol == CROSS ? 16 : -16);
+    int total = (symbol == COMPUTER ? 16 : -16);
 
     // Check columns
     for (int col = 0; col < WIDTH; ++col) {
