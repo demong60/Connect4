@@ -1,8 +1,7 @@
 #pragma once
 #include "Util.h"
 
-class Algorithms
-{
+class Algorithms {
     /**
      * @brief Applies the MinMax tree search to the given game and returns the best move
      *
