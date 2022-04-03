@@ -1,5 +1,38 @@
 #include "Util.h"
 
+pair<int, int> down_right = {1, 1}; // Percorrer a diagonal no sentido sudeste
+pair<int, int> up_right = {-1, 1};  // Percorrer a diagonal no sentido nordeste
+pair<int, int> right = {0, 1};      // Percorrer uma linha no sentido este
+pair<int, int> down = {1, 0};       // Percorrer uma coluna no sentido sul
+
+
+pair<int, int> Util::CountSegments(array<array<char, WIDTH>, HEIGHT> &board, pair<int, int> pos, pair<int, int> dir){
+    int incy = dir.first;
+    int incx = dir.second;
+    pair<int, int> cnt = {0, 0};
+    while(true){
+        if(pos.first >= HEIGHT || pos.second >= WIDTH || pos.first < 0 || pos.second < 0){
+            break;
+        }
+        cnt.first += board[pos.first][pos.second] == CROSS;
+        cnt.second += board[pos.first][pos.second] == CIRCLE;
+        pos.first += incy;
+        pos.second += incx;
+    }
+    return cnt;
+}
+
+pair<int, int> Util::count_cols(array<array<char, WIDTH>, HEIGHT> &board){
+    pair<int, int> ans = {0, 0};
+    for(int i=0; i<WIDTH; ++i){
+        pair<int, int> cur = CountSegments(board, make_pair(0, i), down);
+        ans.first += cur.first;
+        ans.second += cur.second;
+    }
+    return ans;
+}
+
+
 bool Util::MakeMove(int col, Game &game, char symbol)
 {
     if (game.positionsPlayed[col] == 0 || col < 0 || col >= WIDTH)
