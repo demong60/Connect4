@@ -7,7 +7,7 @@ using namespace std;
 #define COMPUTER 'X'
 #define PLAYER 'O'
 
-#define MAX_DEPTH 5
+#define MAX_DEPTH 8
 
 #include "Game.h"
 #include "Algorithms.h"

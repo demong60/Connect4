@@ -7,5 +7,7 @@ class Game {
     array<int, WIDTH> positions_played;
     int utility_value;
     int depth;
+    int counter;
+    int move_played;
     Game();
 };

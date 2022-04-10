@@ -1,6 +1,4 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
-make: *** No rule to make target 'all'.  Stop.
-
 # GNU Make 4.2.1
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2016 Free Software Foundation, Inc.
@@ -8,7 +6,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sun Apr 10 19:47:36 2022
+# Make data base, printed on Sun Apr 10 22:38:04 2022
 
 # Variables
 
@@ -55,7 +53,7 @@ XDG_RUNTIME_DIR = /mnt/wslg/runtime-dir
 # environment
 VSCODE_LOG_STACK = false
 # environment
-VSCODE_IPC_HOOK_CLI = /mnt/wslg/runtime-dir/vscode-ipc-7f107cec-d635-4a72-9c92-f9a0be42a646.sock
+VSCODE_IPC_HOOK_CLI = /mnt/wslg/runtime-dir/vscode-ipc-1f5a4e6a-1644-4997-9744-d9c4f281fbae.sock
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -71,11 +69,11 @@ PWD = /mnt/c/Users/rato1/OneDrive/Documentos/GitHub/Connect4
 # default
 .LOADED := 
 # environment
-WSL_INTEROP = /run/WSL/6650_interop
+WSL_INTEROP = /run/WSL/13221_interop
 # environment
 PULSE_SERVER = /mnt/wslg/PulseServer
 # environment
-WT_SESSION = 7274b0aa-09a5-4a50-8917-2d6c5c0a03fe
+WT_SESSION = 3ec03795-a65d-46bb-a5a7-b2953f3dd729
 # environment
 VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
@@ -83,7 +81,7 @@ HOME = /home/marco
 # environment
 LOGNAME = marco
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
 # environment
 ZSH = /home/marco/.oh-my-zsh
 # environment
@@ -169,9 +167,9 @@ WSL_DISTRO_NAME = Ubuntu
 
 # Directories
 
-# . (device 64, inode 38843546786094349): 20 files, no impossibilities.
+# . (device 64, inode 94012642221431808): 21 files, no impossibilities.
 
-# 20 files, no impossibilities in 1 directories.
+# 21 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -219,7 +217,7 @@ Game.cpp:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-04-10 19:47:35.2542341
+#  Last modified 2022-04-10 19:58:54.1059271
 #  File has been updated.
 #  Successfully updated.
 
@@ -234,14 +232,14 @@ Util.o: Util.cpp Util.h
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 11):
-	g++  -c -g Util.cpp
+	g++ -Ofast -c Util.cpp
 
 Algorithms.o: Algorithms.cpp Algorithms.h
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 14):
-	g++  -c -g Algorithms.cpp
+	g++ -Ofast -c Algorithms.cpp
 
 # Not a target:
 .DEFAULT:
@@ -254,7 +252,7 @@ Game.o: Game.cpp Game.h
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 8):
-	g++  -c -g Game.cpp 
+	g++ -Ofast -c Game.cpp 
 
 clean:
 #  Implicit rule search has not been done.
@@ -268,18 +266,20 @@ Main.o: Main.cpp
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 5):
-	g++  -c -g Main.cpp
+	g++ -Ofast -c Main.cpp
 
 output: Main.o Game.o Util.o Algorithms.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 2):
-	g++  Game.o Main.o Util.o Algorithms.o -Wall -g -o out
+	g++ -Ofast Game.o Main.o Util.o Algorithms.o -Wall -o out
 
 # Not a target:
 Util.h:
  
+make: *** No rule to make target 'all'.  Stop.
+
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -292,12 +292,12 @@ Util.h:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 27 / storage = 233 B / avg = 8 B
-# current buf: size = 8162 B / used = 233 B / count = 27 / avg = 8 B
+# strcache buffers: 1 (0) / strings = 28 / storage = 248 B / avg = 8 B
+# current buf: size = 8162 B / used = 248 B / count = 28 / avg = 8 B
 
-# strcache performance: lookups = 52 / hit rate = 48%
+# strcache performance: lookups = 53 / hit rate = 47%
 # hash-table stats:
-# Load=27/8192=0%, Rehash=0, Collisions=1/52=2%
-# Finished Make data base on Sun Apr 10 19:47:36 2022
+# Load=28/8192=0%, Rehash=0, Collisions=1/53=2%
+# Finished Make data base on Sun Apr 10 22:38:04 2022
 
  

@@ -1,11 +1,45 @@
 #include "Util.h"
 
+// void print(Game &game){
+//   for(auto elem : game.board){
+//     for(auto x : elem){
+//       cout << x << ' ';
+//     } cout << '\n';
+//   }
+// }
+
 int main() {
-    // cout << "Cross starts: \n";
-    // Game game;
-    // int lastPlayed;
-    // cin >> lastPlayed;
-    // Util::MakeMove(lastPlayed, game, COMPUTER);
+    Game game;
+    game.depth = 0;
+    game.counter = 0;
+    game.move_played = 3;
+
+    int i = 1;  // Even == PLAYER starts Odd == COMPUTER starts
+    int last_played;
+
+    Util::PrintGame(game);
+
+    do {
+        if (i % 2 == 0) {
+            cout << "Player's turn\n";
+            cin >> last_played;
+            Util::MakeMove(last_played, game, PLAYER);
+        } else {
+            cout << "Computer playing...\n";
+            last_played = Algorithms::MinMax(game);
+            Util::MakeMove(last_played, game, COMPUTER);
+        }
+
+        Util::PrintGame(game);
+    } while (!Util::CheckForWin(game, game.move_played, ((i++) % 2 == 0 ? PLAYER : COMPUTER)));
+
+    // Util::MakeMove(2, game, COMPUTER);
+    // Util::PrintGame(game);
+
+    // cout << "ver: " << Util::CheckForWin(game, game.move_played, COMPUTER) << '\n';
+    // cout << "counter:" << game.counter << '\n';
+    // cout << "depth:" << game.depth << '\n';
+    // cout << "last_played: " << game.move_played << '\n';
 
     // int i = 0;
     // while (!Util::CheckForWin(game, lastPlayed, COMPUTER))
@@ -19,34 +53,20 @@ int main() {
     // }
     // cout << (lastPlayed % 2 == 1 ? COMPUTER : PLAYER) << " WINS!";
 
-    Game game;
-    Util::MakeMove(0, game, COMPUTER);
-    Util::MakeMove(0, game, PLAYER);
-    // Util::MakeMove(1, game, COMPUTER);
-    // Util::MakeMove(1, game, PLAYER);
-    // Util::MakeMove(2, game, COMPUTER);
-    // Util::MakeMove(2, game, PLAYER);
-    Util::PrintGame(game);
-    int ans = Util::UtilityFunction(game, 2, PLAYER);
-    cout << "tem " << ans << " de pontuação.." << '\n';
-    
     // srand(time(NULL));
     // array<array<char, WIDTH>, HEIGHT> board;
     // for (int i = 0; i < HEIGHT; ++i) {
-    //     for (int j = 0; j < WIDTH; ++j) {
-    //         board[i][j] = (rand() % 2 == 0 ? COMPUTER : PLAYER);
-    //     }
+    // for (int j = 0; j < WIDTH; ++j) {
+    // board[i][j] = (rand() % 2 == 0 ? COMPUTER : PLAYER);
     // }
-
+    // }
+    //
     // for (auto elem : board) {
-    //     for (auto x : elem) {
-    //         cout << x << ' ';
-    //     }
-    //     cout << '\n';
+    // for (auto x : elem) {
+    // cout << x << ' ';
     // }
-    // Game g;
-    // g.board = board;
+    // cout << '\n';
+    // }
 
-    // int ans = Util::UtilityFunction(g, 0, COMPUTER);
-    // cout << "tem " << ans << " de pontuação.." << '\n';
+    // cout << MinMax(game) << '\n';
 }

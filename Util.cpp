@@ -53,29 +53,25 @@ int Util::CountSegments(array<array<char, WIDTH>, HEIGHT> &board, pair<int, int>
 
 int Util::UtilityFunction(Game &game, int move, char symbol) {
     if (CheckForWin(game, move, symbol))
-        return (symbol == COMPUTER) ? 512 : -512;
+        return game.utility_value = (symbol == COMPUTER ? 512 : -512);
 
     // Check for draw - implement counter
-    if (game.depth == 41)
-        return 0;
+    if (game.counter == 42)
+        return game.utility_value = 0;
 
     int total = (symbol == COMPUTER ? 16 : -16);
 
     // Check columns
-    cout << "checking columns..\n";
     for (int col = 0; col < WIDTH; ++col) {
         int cur = CountSegments(game.board, {0, col}, move_down);
         total += cur;
     }
 
-    cout << "checking rows..\n";
     // Check rows
     for (int row = 0; row < HEIGHT; ++row) {
         int cur = CountSegments(game.board, {row, 0}, move_right);
         total += cur;
     }
-
-    cout << "checking primary diagonal..\n";
     // Primary Diagonal
     for (int row = 0; row < HEIGHT; ++row) {
         int cur = CountSegments(game.board, {row, 0}, move_down_right);
@@ -86,8 +82,6 @@ int Util::UtilityFunction(Game &game, int move, char symbol) {
         int cur = CountSegments(game.board, {0, col}, move_down_right);
         total += cur;
     }
-
-    cout << "checking secondary diagonal..\n";
     // Secondary Diagonal
     for (int row = HEIGHT - 1; row >= 0; --row) {
         int cur = CountSegments(game.board, {row, 0}, move_up_right);
@@ -98,7 +92,7 @@ int Util::UtilityFunction(Game &game, int move, char symbol) {
         total += cur;
     }
 
-    return total;
+    return game.utility_value = total;
 }
 
 bool Util::MakeMove(int col, Game &game, char symbol) {
@@ -107,6 +101,9 @@ bool Util::MakeMove(int col, Game &game, char symbol) {
 
     game.board[--game.positions_played[col]][col] = symbol;
 
+    game.move_played = col;
+    game.counter++;
+    game.depth++;
     return true;
 }
 
@@ -178,6 +175,18 @@ void Util::PrintGame(Game &game) {
         }
         cout << "\n";
     }
+    for (int col = 0; col < WIDTH; col++) {
+        if (col == 0)
+            cout << "| ";
+        cout << "- | ";
+    }
+    cout << '\n';
+    for (int col = 0; col < WIDTH; col++) {
+        if (col == 0)
+            cout << "| ";
+        cout << col << " | ";
+    }
+    cout << '\n';
 }
 
 void Util::CreateChildren(Game &game, vector<Game> &children, char symbol) {
@@ -185,10 +194,7 @@ void Util::CreateChildren(Game &game, vector<Game> &children, char symbol) {
         if (game.positions_played[i] == 0)
             continue;
         Game child = game;
-        child.depth++;
         if (MakeMove(i, child, symbol)) {
-            if (child.depth == MAX_DEPTH)
-                child.utility_value = Util::UtilityFunction(child, i, symbol);
             children.push_back(child);
         }
     }
