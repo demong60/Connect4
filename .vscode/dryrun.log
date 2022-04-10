@@ -1,0 +1,5 @@
+make --dry-run --keep-going --print-directory
+make: Entering directory '/mnt/c/Users/rato1/OneDrive/Documentos/GitHub/Connect4'
+g++  Game.o Main.o Util.o Algorithms.o -Wall -g -o out
+make: Leaving directory '/mnt/c/Users/rato1/OneDrive/Documentos/GitHub/Connect4'
+ 

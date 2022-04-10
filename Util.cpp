@@ -8,7 +8,7 @@ pair<int, int> move_down = {1, 0};        // Percorrer uma coluna no sentido sul
 int Util::GetValueForSegment(pair<int, int> segment_results) {
     array<int, 3> map = {1, 10, 50};
 
-    if (segment_results.first > 0 && segment_results.second > 0)
+    if (segment_results.first > 0 && segment_results.second > 0 || (segment_results.first == 0 && segment_results.second == 0))
         return 0;
 
     return segment_results.first > 0 ? (map[segment_results.first - 1]) : (map[segment_results.second - 1] * -1);
@@ -20,9 +20,11 @@ int Util::CountSegments(array<array<char, WIDTH>, HEIGHT> &board, pair<int, int>
     // {X, O}
     pair<int, int> count = {0, 0};
     int result = 0;
-    for(int i=0; i<4; ++i){ // Initialize sliding window
+    for (int i = 0; i < 4; ++i) {  // Initialize sliding window
         int y = position.first, x = position.second;
-        if (y >= HEIGHT || x >= WIDTH || y < 0 || x < 0) { break; }
+        if (y >= HEIGHT || x >= WIDTH || y < 0 || x < 0) {
+            break;
+        }
         count.first += board[y][x] == COMPUTER;
         count.second += board[y][x] == PLAYER;
         position.first += increment_y;
@@ -30,15 +32,15 @@ int Util::CountSegments(array<array<char, WIDTH>, HEIGHT> &board, pair<int, int>
     }
     result += GetValueForSegment(count);
     // cout << "neste momento.. " << count.first << ' ' << count.second << " with score " << result << '\n';
-    while (true) { // Continue sliding the window
+    while (true) {  // Continue sliding the window
         int y = position.first, x = position.second;
         if (y >= HEIGHT || x >= WIDTH || y < 0 || x < 0) {
             break;
         }
         count.first += board[y][x] == COMPUTER;
         count.second += board[y][x] == PLAYER;
-        count.first -= board[y-4*increment_y][x-4*increment_x] == COMPUTER;
-        count.second -= board[y-4*increment_y][x-4*increment_x] == PLAYER;
+        count.first -= board[y - 4 * increment_y][x - 4 * increment_x] == COMPUTER;
+        count.second -= board[y - 4 * increment_y][x - 4 * increment_x] == PLAYER;
 
         position.first += increment_y;
         position.second += increment_x;
@@ -49,15 +51,13 @@ int Util::CountSegments(array<array<char, WIDTH>, HEIGHT> &board, pair<int, int>
     return result;
 }
 
-
-
 int Util::UtilityFunction(Game &game, int move, char symbol) {
     if (CheckForWin(game, move, symbol))
         return (symbol == COMPUTER) ? 512 : -512;
 
     // Check for draw - implement counter
-    if(game.depth == 41)
-	return 0;
+    if (game.depth == 41)
+        return 0;
 
     int total = (symbol == COMPUTER ? 16 : -16);
 
@@ -81,7 +81,7 @@ int Util::UtilityFunction(Game &game, int move, char symbol) {
         int cur = CountSegments(game.board, {row, 0}, move_down_right);
         total += cur;
     }
-    
+
     for (int col = 1; col < WIDTH; ++col) {
         int cur = CountSegments(game.board, {0, col}, move_down_right);
         total += cur;
