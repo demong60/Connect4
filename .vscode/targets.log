@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sun Apr 10 22:38:04 2022
+# Make data base, printed on Sun Apr 10 23:14:48 2022
 
 # Variables
 
@@ -53,7 +53,7 @@ XDG_RUNTIME_DIR = /mnt/wslg/runtime-dir
 # environment
 VSCODE_LOG_STACK = false
 # environment
-VSCODE_IPC_HOOK_CLI = /mnt/wslg/runtime-dir/vscode-ipc-1f5a4e6a-1644-4997-9744-d9c4f281fbae.sock
+VSCODE_IPC_HOOK_CLI = /mnt/wslg/runtime-dir/vscode-ipc-5105993a-5590-4b27-a7c5-e533fa992256.sock
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -69,11 +69,11 @@ PWD = /mnt/c/Users/rato1/OneDrive/Documentos/GitHub/Connect4
 # default
 .LOADED := 
 # environment
-WSL_INTEROP = /run/WSL/13221_interop
+WSL_INTEROP = /run/WSL/1227_interop
 # environment
 PULSE_SERVER = /mnt/wslg/PulseServer
 # environment
-WT_SESSION = 3ec03795-a65d-46bb-a5a7-b2953f3dd729
+WT_SESSION = 1bd27cbb-c28d-4b9c-8f77-8c1b4d830343
 # environment
 VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
@@ -167,9 +167,9 @@ WSL_DISTRO_NAME = Ubuntu
 
 # Directories
 
-# . (device 64, inode 94012642221431808): 21 files, no impossibilities.
+# . (device 64, inode 94012642221431808): 16 files, no impossibilities.
 
-# 21 files, no impossibilities in 1 directories.
+# 16 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -276,10 +276,10 @@ output: Main.o Game.o Util.o Algorithms.o
 	g++ -Ofast Game.o Main.o Util.o Algorithms.o -Wall -o out
 
 # Not a target:
-Util.h:
  
 make: *** No rule to make target 'all'.  Stop.
 
+Util.h:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -292,12 +292,12 @@ make: *** No rule to make target 'all'.  Stop.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 28 / storage = 248 B / avg = 8 B
-# current buf: size = 8162 B / used = 248 B / count = 28 / avg = 8 B
+# strcache buffers: 1 (0) / strings = 27 / storage = 244 B / avg = 9 B
+# current buf: size = 8162 B / used = 244 B / count = 27 / avg = 9 B
 
-# strcache performance: lookups = 53 / hit rate = 47%
+# strcache performance: lookups = 48 / hit rate = 43%
 # hash-table stats:
-# Load=28/8192=0%, Rehash=0, Collisions=1/53=2%
-# Finished Make data base on Sun Apr 10 22:38:04 2022
+# Load=27/8192=0%, Rehash=0, Collisions=1/48=2%
+# Finished Make data base on Sun Apr 10 23:14:48 2022
 
  

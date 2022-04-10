@@ -189,12 +189,25 @@ void Util::PrintGame(Game &game) {
     cout << '\n';
 }
 
+// Returns a vector with the children of a given game
+// Children are middle->out
 void Util::CreateChildren(Game &game, vector<Game> &children, char symbol) {
-    for (int i = 0; i < WIDTH; i++) {
-        if (game.positions_played[i] == 0)
-            continue;
+    int middle = (WIDTH - 1) / 2;
+
+    Game child = game;
+    if (MakeMove(middle, child, symbol))
+        children.push_back(child);
+
+    for (int offset = 1; offset <= (WIDTH - 1) / 2; offset++) {
+        // Right hand side
         Game child = game;
-        if (MakeMove(i, child, symbol)) {
+        if (MakeMove(middle + offset, child, symbol)) {
+            children.push_back(child);
+        }
+
+        // Left hand side
+        child = game;
+        if (MakeMove(middle - offset, child, symbol)) {
             children.push_back(child);
         }
     }
