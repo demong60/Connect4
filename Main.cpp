@@ -19,18 +19,34 @@ int main() {
     // }
     // cout << (lastPlayed % 2 == 1 ? COMPUTER : PLAYER) << " WINS!";
 
-    srand(time(NULL));
-    array<array<char, WIDTH>, HEIGHT> board;
-    for (int i = 0; i < HEIGHT; ++i) {
-        for (int j = 0; j < WIDTH; ++j) {
-            board[i][j] = (rand() % 2 == 0 ? COMPUTER : PLAYER);
-        }
-    }
+    Game game;
+    Util::MakeMove(0, game, COMPUTER);
+    Util::MakeMove(0, game, PLAYER);
+    // Util::MakeMove(1, game, COMPUTER);
+    // Util::MakeMove(1, game, PLAYER);
+    // Util::MakeMove(2, game, COMPUTER);
+    // Util::MakeMove(2, game, PLAYER);
+    Util::PrintGame(game);
+    int ans = Util::UtilityFunction(game, 2, PLAYER);
+    cout << "tem " << ans << " de pontuação.." << '\n';
+    
+    // srand(time(NULL));
+    // array<array<char, WIDTH>, HEIGHT> board;
+    // for (int i = 0; i < HEIGHT; ++i) {
+    //     for (int j = 0; j < WIDTH; ++j) {
+    //         board[i][j] = (rand() % 2 == 0 ? COMPUTER : PLAYER);
+    //     }
+    // }
 
-    for (auto elem : board) {
-        for (auto x : elem) {
-            cout << x << ' ';
-        }
-        cout << '\n';
-    }
+    // for (auto elem : board) {
+    //     for (auto x : elem) {
+    //         cout << x << ' ';
+    //     }
+    //     cout << '\n';
+    // }
+    // Game g;
+    // g.board = board;
+
+    // int ans = Util::UtilityFunction(g, 0, COMPUTER);
+    // cout << "tem " << ans << " de pontuação.." << '\n';
 }

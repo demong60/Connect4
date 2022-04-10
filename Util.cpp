@@ -5,23 +5,6 @@ pair<int, int> move_up_right = {-1, 1};   // Percorrer a diagonal no sentido nor
 pair<int, int> move_right = {0, 1};       // Percorrer uma linha no sentido este
 pair<int, int> move_down = {1, 0};        // Percorrer uma coluna no sentido sul
 
-pair<int, int> Util::CountSegments(array<array<char, WIDTH>, HEIGHT> &board, pair<int, int> position, pair<int, int> direction) {
-    int increment_y = direction.first;
-    int increment_x = direction.second;
-    // {X, O}
-    pair<int, int> count = {0, 0};
-    while (true) {
-        if (position.first >= HEIGHT || position.second >= WIDTH || position.first < 0 || position.second < 0) {
-            break;
-        }
-        count.first += board[position.first][position.second] == COMPUTER;
-        count.second += board[position.first][position.second] == PLAYER;
-        position.first += increment_y;
-        position.second += increment_x;
-    }
-    return count;
-}
-
 int Util::GetValueForSegment(pair<int, int> segment_results) {
     array<int, 3> map = {1, 10, 50};
 
@@ -30,6 +13,43 @@ int Util::GetValueForSegment(pair<int, int> segment_results) {
 
     return segment_results.first > 0 ? (map[segment_results.first - 1]) : (map[segment_results.second - 1] * -1);
 }
+
+int Util::CountSegments(array<array<char, WIDTH>, HEIGHT> &board, pair<int, int> position, pair<int, int> direction) {
+    int increment_y = direction.first;
+    int increment_x = direction.second;
+    // {X, O}
+    pair<int, int> count = {0, 0};
+    int result = 0;
+    for(int i=0; i<4; ++i){ // Initialize sliding window
+        int y = position.first, x = position.second;
+        if (y >= HEIGHT || x >= WIDTH || y < 0 || x < 0) { break; }
+        count.first += board[y][x] == COMPUTER;
+        count.second += board[y][x] == PLAYER;
+        position.first += increment_y;
+        position.second += increment_x;
+    }
+    result += GetValueForSegment(count);
+    // cout << "neste momento.. " << count.first << ' ' << count.second << " with score " << result << '\n';
+    while (true) { // Continue sliding the window
+        int y = position.first, x = position.second;
+        if (y >= HEIGHT || x >= WIDTH || y < 0 || x < 0) {
+            break;
+        }
+        count.first += board[y][x] == COMPUTER;
+        count.second += board[y][x] == PLAYER;
+        count.first -= board[y-4*increment_y][x-4*increment_x] == COMPUTER;
+        count.second -= board[y-4*increment_y][x-4*increment_x] == PLAYER;
+
+        position.first += increment_y;
+        position.second += increment_x;
+        result += GetValueForSegment(count);
+        // cout << "\n\n";
+        // cout << "neste momento.. " << count.first << ' ' << count.second << " with score " << result << '\n';
+    }
+    return result;
+}
+
+
 
 int Util::UtilityFunction(Game &game, int move, char symbol) {
     if (CheckForWin(game, move, symbol))
@@ -42,35 +62,40 @@ int Util::UtilityFunction(Game &game, int move, char symbol) {
     int total = (symbol == COMPUTER ? 16 : -16);
 
     // Check columns
+    cout << "checking columns..\n";
     for (int col = 0; col < WIDTH; ++col) {
-        pair<int, int> cur = CountSegments(game.board, {0, col}, move_down);
-        total += GetValueForSegment(cur);
+        int cur = CountSegments(game.board, {0, col}, move_down);
+        total += cur;
     }
 
+    cout << "checking rows..\n";
     // Check rows
     for (int row = 0; row < HEIGHT; ++row) {
-        pair<int, int> cur = CountSegments(game.board, {row, 0}, move_right);
-        total += GetValueForSegment(cur);
+        int cur = CountSegments(game.board, {row, 0}, move_right);
+        total += cur;
     }
 
+    cout << "checking primary diagonal..\n";
     // Primary Diagonal
     for (int row = 0; row < HEIGHT; ++row) {
-        pair<int, int> cur = CountSegments(game.board, {row, 0}, move_down_right);
-        total += GetValueForSegment(cur);
+        int cur = CountSegments(game.board, {row, 0}, move_down_right);
+        total += cur;
     }
+    
     for (int col = 1; col < WIDTH; ++col) {
-        pair<int, int> cur = CountSegments(game.board, {0, col}, move_down_right);
-        total += GetValueForSegment(cur);
+        int cur = CountSegments(game.board, {0, col}, move_down_right);
+        total += cur;
     }
 
+    cout << "checking secondary diagonal..\n";
     // Secondary Diagonal
     for (int row = HEIGHT - 1; row >= 0; --row) {
-        pair<int, int> cur = CountSegments(game.board, {row, 0}, move_up_right);
-        total += GetValueForSegment(cur);
+        int cur = CountSegments(game.board, {row, 0}, move_up_right);
+        total += cur;
     }
     for (int col = 1; col < WIDTH; ++col) {
-        pair<int, int> cur = CountSegments(game.board, {HEIGHT - 1, col}, move_up_right);
-        total += GetValueForSegment(cur);
+        int cur = CountSegments(game.board, {HEIGHT - 1, col}, move_up_right);
+        total += cur;
     }
 
     return total;

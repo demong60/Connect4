@@ -14,7 +14,7 @@ using namespace std;
 
 namespace Util {
 
-pair<int, int> CountSegments(array<array<char, WIDTH>, HEIGHT> &board, pair<int, int> pos, pair<int, int> dir);
+int CountSegments(array<array<char, WIDTH>, HEIGHT> &board, pair<int, int> pos, pair<int, int> dir);
 bool MakeMove(int col, Game &game, char symbol);
 void PrintGame(Game &game);
 void CreateChildren(Game &game, vector<Game> &children, char symbol);
