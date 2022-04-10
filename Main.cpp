@@ -12,7 +12,6 @@ int main() {
     Game game;
     game.depth = 0;
     game.counter = 0;
-    game.move_played = 3;
 
     int i = 1;  // Even == PLAYER starts Odd == COMPUTER starts
     int last_played;
