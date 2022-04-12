@@ -7,16 +7,13 @@
 //     } cout << '\n';
 //   }
 // }
-
 int main() {
+    int i = 1;  // Even == PLAYER starts Odd == COMPUTER starts
+    int last_played;
     Game game;
     game.depth = 0;
     game.counter = 0;
-
-    int i = 1;  // Even == PLAYER starts Odd == COMPUTER starts
-    int last_played;
-
-    Util::PrintGame(game);
+    game.move_played = 3;
 
     do {
         if (i % 2 == 0) {
@@ -32,40 +29,24 @@ int main() {
         Util::PrintGame(game);
     } while (!Util::CheckForWin(game, game.move_played, ((i++) % 2 == 0 ? PLAYER : COMPUTER)));
 
-    // Util::MakeMove(2, game, COMPUTER);
-    // Util::PrintGame(game);
+    // int n;
+    // cin >> n;
+    // for (int i = 0; i < n; i++) {
 
-    // cout << "ver: " << Util::CheckForWin(game, game.move_played, COMPUTER) << '\n';
-    // cout << "counter:" << game.counter << '\n';
-    // cout << "depth:" << game.depth << '\n';
-    // cout << "last_played: " << game.move_played << '\n';
+    //     int tmp;
+    //     cin >> tmp;  // 1 = computer
+    //     char move = tmp == 1 ? COMPUTER : PLAYER;
+    //     char antiMove = move == COMPUTER ? PLAYER : COMPUTER;
 
-    // int i = 0;
-    // while (!Util::CheckForWin(game, lastPlayed, COMPUTER))
-    // {
-    //     i++;
-    //     cin >> lastPlayed;
-    //     while (!Util::MakeMove(lastPlayed, game, i % 2 == 0 ? COMPUTER : PLAYER))
-    //     {
-    //         cin >> lastPlayed;
+    //     int nMoves;
+    //     cin >> nMoves;
+    //     int col;
+    //     for (int j = 0; j < nMoves; j++) {
+    //         cin >> col;
+    //         Util::MakeMove(col, game, j % 2 == 0 ? move : antiMove);
     //     }
+    //     // Util::PrintGame(game);
+    //     cout << Util::UtilityFunction(game, game.move_played, nMoves % 2 == 0 ? antiMove : move);
+    //     cout << "\n";
     // }
-    // cout << (lastPlayed % 2 == 1 ? COMPUTER : PLAYER) << " WINS!";
-
-    // srand(time(NULL));
-    // array<array<char, WIDTH>, HEIGHT> board;
-    // for (int i = 0; i < HEIGHT; ++i) {
-    // for (int j = 0; j < WIDTH; ++j) {
-    // board[i][j] = (rand() % 2 == 0 ? COMPUTER : PLAYER);
-    // }
-    // }
-    //
-    // for (auto elem : board) {
-    // for (auto x : elem) {
-    // cout << x << ' ';
-    // }
-    // cout << '\n';
-    // }
-
-    // cout << MinMax(game) << '\n';
 }

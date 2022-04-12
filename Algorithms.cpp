@@ -1,8 +1,8 @@
 #include "Util.h"
 
 int Algorithms::MinMax(Game &game) {
-    if (game.depth == 0)
-        return (WIDTH - 1) / 2;
+    //    if (game.depth == 0)
+    //      return (WIDTH - 1) / 2;
     game.depth = 0;
     return MaxValue(game).second;
 }

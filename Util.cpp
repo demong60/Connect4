@@ -22,14 +22,14 @@ int Util::CountSegments(array<array<char, WIDTH>, HEIGHT> &board, pair<int, int>
     int result = 0;
     for (int i = 0; i < 4; ++i) {  // Initialize sliding window
         int y = position.first, x = position.second;
-        if (y >= HEIGHT || x >= WIDTH || y < 0 || x < 0) {
-            break;
-        }
+        if (y >= HEIGHT || x >= WIDTH || y < 0 || x < 0)
+            return 0;
         count.first += board[y][x] == COMPUTER;
         count.second += board[y][x] == PLAYER;
         position.first += increment_y;
         position.second += increment_x;
     }
+
     result += GetValueForSegment(count);
     // cout << "neste momento.. " << count.first << ' ' << count.second << " with score " << result << '\n';
     while (true) {  // Continue sliding the window
@@ -51,6 +51,7 @@ int Util::CountSegments(array<array<char, WIDTH>, HEIGHT> &board, pair<int, int>
     return result;
 }
 
+// Symbol == Last player
 int Util::UtilityFunction(Game &game, int move, char symbol) {
     if (CheckForWin(game, move, symbol))
         return game.utility_value = (symbol == COMPUTER ? 512 : -512);
@@ -59,7 +60,7 @@ int Util::UtilityFunction(Game &game, int move, char symbol) {
     if (game.counter == 42)
         return game.utility_value = 0;
 
-    int total = (symbol == COMPUTER ? 16 : -16);
+    int total = (symbol == COMPUTER ? -16 : 16);
 
     // Check columns
     for (int col = 0; col < WIDTH; ++col) {
@@ -72,6 +73,7 @@ int Util::UtilityFunction(Game &game, int move, char symbol) {
         int cur = CountSegments(game.board, {row, 0}, move_right);
         total += cur;
     }
+
     // Primary Diagonal
     for (int row = 0; row < HEIGHT; ++row) {
         int cur = CountSegments(game.board, {row, 0}, move_down_right);
@@ -109,7 +111,7 @@ bool Util::MakeMove(int col, Game &game, char symbol) {
 
 bool Util::CheckForWin(Game &game, int col, char symbol) {
     // Check horizontal
-    int sum = 1;
+    int sum = game.board[game.positions_played[col]][col] == symbol;
     int currentRow = game.positions_played[col];
     for (int colI = 1; colI <= 3 && col - colI >= 0; colI++)
         if (game.board[currentRow][col - colI] == symbol)
@@ -121,20 +123,20 @@ bool Util::CheckForWin(Game &game, int col, char symbol) {
             sum++;
         else
             break;
-    if (sum == 4)
+    if (sum >= 4)
         return true;
 
-    sum = 1;
+    sum = game.board[game.positions_played[col]][col] == symbol;
     // Check vertical
     for (int rowI = 1; rowI <= 3 && rowI < HEIGHT; rowI++)
         if (game.board[currentRow + rowI][col] == symbol)
             sum++;
         else
             break;
-    if (sum == 4)
+    if (sum >= 4)
         return true;
 
-    sum = 1;
+    sum = game.board[game.positions_played[col]][col] == symbol;
     // Check main diagonal
     for (int i = 1; i <= 3 && currentRow - i >= 0 && col + i < WIDTH; i++)
         if (game.board[currentRow - i][col + i] == symbol)
@@ -146,10 +148,10 @@ bool Util::CheckForWin(Game &game, int col, char symbol) {
             sum++;
         else
             break;
-    if (sum == 4)
+    if (sum >= 4)
         return true;
 
-    sum = 1;
+    sum = game.board[game.positions_played[col]][col] == symbol;
     // Check secondary diagonal
     for (int i = 1; i <= 3 && currentRow - i >= 0 && col - i >= 0; i++)
         if (game.board[currentRow - i][col - i] == symbol)
@@ -162,7 +164,7 @@ bool Util::CheckForWin(Game &game, int col, char symbol) {
         else
             break;
 
-    return sum == 4;
+    return sum >= 4;
 }
 
 void Util::PrintGame(Game &game) {
@@ -200,7 +202,7 @@ void Util::CreateChildren(Game &game, vector<Game> &children, char symbol) {
 
     for (int offset = 1; offset <= (WIDTH - 1) / 2; offset++) {
         // Right hand side
-        Game child = game;
+        child = game;
         if (MakeMove(middle + offset, child, symbol)) {
             children.push_back(child);
         }
