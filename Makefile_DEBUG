@@ -1,17 +1,20 @@
-output: Main.o Game.o Util.o Algorithms.o
-	g++ Game.o Main.o Util.o Algorithms.o -Wall -g -o out
+output: Main.o Game.o Util.o Algorithms.o Node.o
+	g++ Game.o Main.o Util.o Algorithms.o Node.o  -Wall -g -o out
 
 Main.o: Main.cpp
-	g++ -c -g Main.cpp
+	g++ -c -g  Main.cpp
 
 Game.o: Game.cpp Game.h
-	g++ -c -g Game.cpp 
+	g++ -c -g  Game.cpp 
 
 Util.o: Util.cpp Util.h
-	g++ -c -g Util.cpp
+	g++ -c -g  Util.cpp
 
 Algorithms.o: Algorithms.cpp Algorithms.h
-	g++ -c -g Algorithms.cpp
+	g++ -c -g  Algorithms.cpp
+
+Node.o: Node.cpp Node.h
+	g++ -c -g  Node.cpp
 
 clean:
 	rm *.o out

@@ -1,5 +1,6 @@
 #pragma once
 #include "Util.h"
+#include "Node.h"
 
 namespace Algorithms {
 /**
@@ -25,5 +26,11 @@ int MinMaxWithAlphaBetaPruning(Game &game);
  *
  * @param game
  */
-int MonteCarloTreeSearch(Game &game);
+int MonteCarloTreeSearch(shared_ptr<Node> root);
+
+int Simulate(Node &node);
+void Expand(shared_ptr<Node> node);
+void Backpropagate(Node &node, int result);
+shared_ptr<Node> Select(shared_ptr<Node> root);
+
 }  // namespace Algorithms

@@ -54,13 +54,13 @@ int Util::CountSegments(array<array<char, WIDTH>, HEIGHT> &board, pair<int, int>
 // Symbol == Last player
 int Util::UtilityFunction(Game &game, int move, char symbol) {
     if (CheckForWin(game, move, symbol))
-        return game.utility_value = (symbol == COMPUTER ? 512 : -512);
+        return game.utility_value = (symbol == COMPUTER ? MAX_SCORE : -MAX_SCORE);
 
     // Check for draw - implement counter
     if (game.counter == 42)
         return game.utility_value = 0;
 
-    int total = (symbol == COMPUTER ? -16 : 16);
+    int total = 0;  //(symbol == COMPUTER ? -16 : 16);
 
     // Check columns
     for (int col = 0; col < WIDTH; ++col) {
@@ -213,4 +213,18 @@ void Util::CreateChildren(Game &game, vector<Game> &children, char symbol) {
             children.push_back(child);
         }
     }
+    // for (int i = 0; i < WIDTH; i++) {
+    //     Game child = game;
+    //     if (MakeMove(i, child, symbol))
+    //         children.push_back(child);
+    // }
+}
+
+char Util::GetNextSymbol(char symbol) {
+    return (symbol == COMPUTER ? PLAYER : COMPUTER);
+}
+
+double Util::CalculateUCB(Node &node) {
+    double C = 2;
+    return (node.total + C * (sqrt((2 * log(node.parent->visited)) / node.visited)));
 }
