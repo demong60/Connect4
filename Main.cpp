@@ -1,8 +1,8 @@
 #include "Util.h"
 /* Leave the algorithm we want to use uncommented */
 // #define MONTE_CARLO
-// #define ALPHA_BETA
-#define MINIMAX
+#define ALPHA_BETA
+// #define MINIMAX
 
 int main() {
     // ios::sync_with_stdio(0);

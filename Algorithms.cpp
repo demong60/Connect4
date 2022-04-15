@@ -1,9 +1,19 @@
 #include "Algorithms.h"
 
 int Algorithms::MinMax(Game &game) {
-    //    if (game.depth == 0)
-    //      return (WIDTH - 1) / 2;
+    // ========================================================
+    /* 
+        Para já os nossos min-max e alpha-beta dependem de 
+        que o game.move_played seja uma posição entre 0 e 6
+        Se não fizermos esta linha a posição vai ser random - ex: 321224 (que obviamente está fora do indice do array)
+        e por isso daria seg-fault
+        podemos evitar ter de fazer isto, mas temos de arranjar uma alternativa para a primeira jogada
+        ou fazer um if_statement em baixo 
+    */
+    if (game.depth == 0)
+         return (WIDTH - 1) / 2;
     game.depth = 0;
+    // ========================================================
     pair<int, int> res = MaxValue(game);
     cout << res.first << " " << res.second << "\n";
     return res.second;
@@ -126,7 +136,20 @@ int Algorithms::MonteCarloTreeSearch(shared_ptr<Node> root) {
 }
 
 int Algorithms::MinMaxWithAlphaBetaPruning(Game &game){
+    // game.depth = 0;
+    // ========================================================
+    /* 
+        Para já os nossos min-max e alpha-beta dependem de 
+        que o game.move_played seja uma posição entre 0 e 6
+        Se não fizermos esta linha a posição vai ser random - ex: 321224 (que obviamente está fora do indice do array)
+        e por isso daria seg-fault
+        podemos evitar ter de fazer isto, mas temos de arranjar uma alternativa para a primeira jogada
+        ou fazer um if_statement em baixo 
+    */
+    if (game.depth == 0)
+         return (WIDTH - 1) / 2;
     game.depth = 0;
+    // ========================================================
     pair<int, int> alpha = {INT_MIN, -1}, beta = {INT_MAX, -1};
     pair<int, int> res = Algorithms::MaxValue(game, alpha, beta);
     cout << res.first << " " << res.second << "\n";
@@ -136,8 +159,8 @@ int Algorithms::MinMaxWithAlphaBetaPruning(Game &game){
 pair<int, int> Algorithms::MaxValue(Game &game, pair<int, int> alpha, pair<int, int> beta) {
     if (game.depth == MAX_DEPTH)
         return {Util::UtilityFunction(game, game.move_played, PLAYER), game.move_played};
-    // if (Util::CheckForWin(game, game.move_played, PLAYER)) return {-512, game.move_played};
-    // if (Util::CheckForWin(game, game.move_played, COMPUTER)) return {512, game.move_played};
+    if (Util::CheckForWin(game, game.move_played, PLAYER)) return {-512, game.move_played};
+    if (Util::CheckForWin(game, game.move_played, COMPUTER)) return {512, game.move_played};
     if (game.counter == 42) return {0, game.move_played};
 
     pair<int, int> value = {INT_MIN, -1};
@@ -158,8 +181,8 @@ pair<int, int> Algorithms::MaxValue(Game &game, pair<int, int> alpha, pair<int, 
 pair<int, int> Algorithms::MinValue(Game &game, pair<int, int> alpha, pair<int, int> beta) {
     if (game.depth == MAX_DEPTH)
         return {Util::UtilityFunction(game, game.move_played, COMPUTER), game.move_played};
-    // if (Util::CheckForWin(game, game.move_played, PLAYER)) return {-512, game.move_played};
-    // if (Util::CheckForWin(game, game.move_played, COMPUTER)) return {512, game.move_played};
+    if (Util::CheckForWin(game, game.move_played, PLAYER)) return {-512, game.move_played};
+    if (Util::CheckForWin(game, game.move_played, COMPUTER)) return {512, game.move_played};
     if (game.counter == 42) return {0, game.move_played};
 
     pair<int, int> value = {INT_MAX, -1};
