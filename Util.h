@@ -25,4 +25,5 @@ int UtilityFunction(Game &game, int move, char symbol);
 int GetValueForSegment(pair<int, int> segment_results);
 char GetNextSymbol(char symbol);
 double CalculateUCB(Node &node);
+shared_ptr<Node> GetBestUCTChild(vector<shared_ptr<Node>> &children);
 }  // namespace Util

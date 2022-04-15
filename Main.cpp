@@ -19,7 +19,7 @@ int main() {
     //         Util::MakeMove(last_played, game, PLAYER);
     //     } else {
     //         cout << "Computer playing...\n";
-    //         last_played = Algorithms::MinMax(game);
+    //         last_played = Algorithms::MonteCarloTreeSearch(game);
     //         Util::MakeMove(last_played, game, COMPUTER);
     //     }
 
@@ -43,12 +43,29 @@ int main() {
 
     srand(time(NULL));
 
-    // vector<int> moveList;
+    vector<int> moveList;
     shared_ptr<Node> root = make_shared<Node>(game, PLAYER);
     root->parent = nullptr;
-    int move = Algorithms::MonteCarloTreeSearch(root);
-    root = root->children[move];
-    Util::PrintGame(root->game);
+
+    do {
+        if (i % 2 == 0) {
+            cout << "Player's turn\n";
+            cin >> last_played;
+        } else {
+            cout << "Computer playing...\n";
+            last_played = Algorithms::MonteCarloTreeSearch(root);
+        }
+
+        for (auto child : root->children) {
+            if (child->game.move_played == last_played) {
+                root = child;
+                break;
+            }
+        }
+        root->parent = nullptr;
+        Util::PrintGame(root->game);
+        cout << last_played << "\n";
+    } while (!Util::CheckForWin(root->game, root->game.move_played, ((i++) % 2 == 0 ? PLAYER : COMPUTER)) && root->game.counter != 42);
 
     // cin >> n;
     // for (i = 0; i < n; i++) {

@@ -80,28 +80,13 @@ void Algorithms::Backpropagate(Node &node, int result) {
 }
 
 shared_ptr<Node> Algorithms::Select(shared_ptr<Node> node) {
-    if (node->children.size() == 0 || Util::CheckForWin(node->game, node->game.move_played, node->symbol) || node->game.counter == 42) {  // is a leaf node
-        if (node->visited == 0)
-            return node;
-        node->Expand();
-        return node->children[0];
+    shared_ptr<Node> temp = node;
+
+    while (temp->children.size() != 0) {
+        temp = Util::GetBestUCTChild(temp->children);
     }
 
-    double max_ucb = INT_MIN;
-    shared_ptr<Node> current_node;
-    for (shared_ptr<Node> child : node->children) {
-        if (child->visited == 0) {
-            current_node = child;
-            break;
-        }
-        double child_ucb = Util::CalculateUCB(*child);
-        if (child_ucb > max_ucb) {
-            current_node = child;
-            max_ucb = child_ucb;
-        }
-    }
-
-    return Select(current_node);
+    return temp;
 }
 
 void Algorithms::Expand(shared_ptr<Node> node) {
@@ -109,18 +94,31 @@ void Algorithms::Expand(shared_ptr<Node> node) {
 }
 
 int Algorithms::MonteCarloTreeSearch(shared_ptr<Node> root) {
-    for (int i = 0; i < 1'000'000; i++) {
+    int best_move;
+    bool done = false;
+    // if (root->game.depth == 0) {
+    //     best_move = 3;
+    //     done = true;
+    // }
+    for (int i = 0; i < 10'0'000; i++) {
         shared_ptr<Node> node = Algorithms::Select(root);
+        if (!Util::CheckForWin(node->game, node->game.move_played, node->symbol) && node->game.counter < 42)
+            Algorithms::Expand(node);
+
+        if (node->children.size() > 0)
+            node = node->children[0];
+
         int value = Algorithms::Simulate(*node);
         Algorithms::Backpropagate(*node, value);
     }
 
-    int best_move;
     int max_total_playouts = INT_MIN;
-    for (shared_ptr<Node> child : root->children) {
-        if (child->visited > max_total_playouts) {
-            max_total_playouts = child->visited;
-            best_move = child->game.move_played;
+    if (!done) {
+        for (shared_ptr<Node> child : root->children) {
+            if (child->visited > max_total_playouts) {
+                max_total_playouts = child->visited;
+                best_move = child->game.move_played;
+            }
         }
     }
 
