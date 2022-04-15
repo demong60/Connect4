@@ -124,3 +124,55 @@ int Algorithms::MonteCarloTreeSearch(shared_ptr<Node> root) {
 
     return best_move;
 }
+
+int Algorithms::MinMaxWithAlphaBetaPruning(Game &game){
+    game.depth = 0;
+    pair<int, int> alpha = {INT_MIN, -1}, beta = {INT_MAX, -1};
+    pair<int, int> res = Algorithms::MaxValue(game, alpha, beta);
+    cout << res.first << " " << res.second << "\n";
+    return res.second;
+}
+
+pair<int, int> Algorithms::MaxValue(Game &game, pair<int, int> alpha, pair<int, int> beta) {
+    if (game.depth == MAX_DEPTH)
+        return {Util::UtilityFunction(game, game.move_played, PLAYER), game.move_played};
+    // if (Util::CheckForWin(game, game.move_played, PLAYER)) return {-512, game.move_played};
+    // if (Util::CheckForWin(game, game.move_played, COMPUTER)) return {512, game.move_played};
+    if (game.counter == 42) return {0, game.move_played};
+
+    pair<int, int> value = {INT_MIN, -1};
+    vector<Game> children;
+    Util::CreateChildren(game, children, COMPUTER);
+    for (Game child : children) {
+        pair<int, int> cur = MinValue(child, alpha, beta);
+
+        if(cur.first > value.first) value = cur;
+        if(cur.first >= beta.first) return beta;
+        if(cur.first > alpha.first) alpha = cur;
+    }
+
+    return value;
+}
+
+// {score, movePlayed}
+pair<int, int> Algorithms::MinValue(Game &game, pair<int, int> alpha, pair<int, int> beta) {
+    if (game.depth == MAX_DEPTH)
+        return {Util::UtilityFunction(game, game.move_played, COMPUTER), game.move_played};
+    // if (Util::CheckForWin(game, game.move_played, PLAYER)) return {-512, game.move_played};
+    // if (Util::CheckForWin(game, game.move_played, COMPUTER)) return {512, game.move_played};
+    if (game.counter == 42) return {0, game.move_played};
+
+    pair<int, int> value = {INT_MAX, -1};
+    vector<Game> children;
+    Util::CreateChildren(game, children, PLAYER);
+    for (Game child : children) {
+        pair<int, int> cur = MaxValue(child, alpha, beta);
+
+        if(cur.first < value.first) value = cur;
+        if(cur.first <= alpha.first) return alpha;
+        if(cur.first < beta.first) beta = cur;
+    }
+
+    return value;
+}
+
