@@ -100,6 +100,8 @@ int main() {
     Game game_ab;
     game_ab.depth = 0;
     game_ab.counter = 0;
+    game_ab.move_played = 3;
+
 
     int i_ab = 1;  // Even == PLAYER starts Odd == COMPUTER starts
     int last_played_ab;
@@ -125,6 +127,8 @@ int main() {
     Game game_mm;
     game_mm.depth = 0;
     game_mm.counter = 0;
+    game_mm.move_played = 3;
+
 
     int i_mm = 1;  // Even == PLAYER starts Odd == COMPUTER starts
     int last_played_mm;

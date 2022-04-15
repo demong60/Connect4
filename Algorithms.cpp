@@ -1,6 +1,6 @@
 #include "Algorithms.h"
 
-const int MAX_ITER = 12; // para mudar temporariamente a search do alfa-beta (no fim retirar)
+const int MAX_ITER = 10; // para mudar temporariamente a search do alfa-beta (no fim retirar)
 
 int Algorithms::MinMax(Game &game) {
     // ========================================================
@@ -12,9 +12,9 @@ int Algorithms::MinMax(Game &game) {
         podemos evitar ter de fazer isto, mas temos de arranjar uma alternativa para a primeira jogada
         ou fazer um if_statement em baixo 
     */
-    if (game.depth == 0)
-         return (WIDTH - 1) / 2;
-    game.depth = 0;
+    // if (game.depth == 0)
+    //      return (WIDTH - 1) / 2;
+    // game.depth = 0;
     // ========================================================
     pair<int, int> res = MaxValue(game);
     cout << res.first << " " << res.second << "\n";
@@ -148,13 +148,12 @@ int Algorithms::MinMaxWithAlphaBetaPruning(Game &game){
         podemos evitar ter de fazer isto, mas temos de arranjar uma alternativa para a primeira jogada
         ou fazer um if_statement em baixo 
     */
-    if (game.depth == 0)
-         return (WIDTH - 1) / 2;
+    // if (game.depth == 0)
+    //      return (WIDTH - 1) / 2;
     game.depth = 0;
     // ========================================================
     pair<int, int> alpha = {INT_MIN, -1}, beta = {INT_MAX, -1};
     pair<int, int> res = Algorithms::MaxValue(game, alpha, beta);
-    cout << res.first << " " << res.second << "\n";
     return res.second;
 }
 
