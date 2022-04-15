@@ -22,6 +22,8 @@ pair<int, int> MinValue(Game &game);
  * @param game
  */
 int MinMaxWithAlphaBetaPruning(Game &game);
+pair<int, int> MaxValue(Game &game, pair<int, int> alpha, pair<int, int> beta);
+pair<int, int> MinValue(Game &game, pair<int, int> alpha, pair<int, int> beta);
 
 /**
  * @brief Applies the Monte Carlo tree search to the given game and returns the best move

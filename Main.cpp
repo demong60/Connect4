@@ -1,9 +1,14 @@
 #include "Util.h"
+/* Leave the algorithm we want to use uncommented */
+// #define MONTE_CARLO
+#define ALPHA_BETA
+// #define MINIMAX
 
 int main() {
     // ios::sync_with_stdio(0);
     // cin.tie(0);
 
+#ifdef MONTE_CARLO
     int i = 1;  // Even == PLAYER starts Odd == COMPUTER starts
     int last_played;
 
@@ -54,7 +59,7 @@ int main() {
     //     cout << Util::UtilityFunction(child, child.move_played, COMPUTER) << "\n";
     // }
 
-    // srand(time(NULL));
+    srand(time(NULL));
 
     // vector<int> moveList;
     // shared_ptr<Node> root = make_shared<Node>(game, PLAYER);
@@ -69,16 +74,18 @@ int main() {
     //         last_played = Algorithms::MonteCarloTreeSearch(root);
     //     }
 
-    //     for (auto child : root->children) {
-    //         if (child->game.move_played == last_played) {
-    //             root = child;
-    //             break;
-    //         }
-    //     }
-    //     root->parent = nullptr;
-    //     Util::PrintGame(root->game);
-    //     cout << last_played << "\n";
-    // } while (!Util::CheckForWin(root->game, root->game.move_played, ((i++) % 2 == 0 ? PLAYER : COMPUTER)) && root->game.counter != 42);
+    for (auto child : root->children) {
+        if (child->game.move_played == last_played) {
+            root = child;
+            break;
+        }
+    }
+    root->parent = nullptr;
+    Util::PrintGame(root->game);
+    cout << last_played << "\n";
+}
+while (!Util::CheckForWin(root->game, root->game.move_played, ((i++) % 2 == 0 ? PLAYER : COMPUTER)) && root->game.counter != 42)
+    ;
 
     // cin >> n;
     // for (i = 0; i < n; i++) {
@@ -99,4 +106,55 @@ int main() {
     //     cout << Util::UtilityFunction(game, game.move_played, nMoves % 2 == 0 ? antiMove : move);
     //     cout << "\n";
     // }
+
+#endif
+
+#ifdef ALPHA_BETA
+Game game_ab;
+game_ab.depth = 0;
+game_ab.counter = 0;
+game_ab.move_played = 3;
+
+int i_ab = 1;  // Even == PLAYER starts Odd == COMPUTER starts
+int last_played_ab;
+
+do {
+    if (i_ab++ % 2 == 0) {
+        cout << "Player's turn\n";
+        cin >> last_played_ab;
+        Util::MakeMove(last_played_ab, game_ab, PLAYER);
+    } else {
+        cout << "Computer playing...\n";
+        last_played_ab = Algorithms::MinMaxWithAlphaBetaPruning(game_ab);
+        Util::MakeMove(last_played_ab, game_ab, COMPUTER);
+    }
+
+    Util::PrintGame(game_ab);
+} while (!Util::CheckForWin(game_ab, game_ab.move_played));
+#endif
+
+#ifdef MINIMAX
+
+Game game_mm;
+game_mm.depth = 0;
+game_mm.counter = 0;
+game_mm.move_played = 3;
+
+int i_mm = 1;  // Even == PLAYER starts Odd == COMPUTER starts
+int last_played_mm;
+
+do {
+    if (i_mm % 2 == 0) {
+        cout << "Player's turn\n";
+        cin >> last_played_mm;
+        Util::MakeMove(last_played_mm, game_mm, PLAYER);
+    } else {
+        cout << "Computer playing...\n";
+        last_played_mm = Algorithms::MinMax(game_mm);
+        Util::MakeMove(last_played_mm, game_mm, COMPUTER);
+    }
+
+    Util::PrintGame(game_mm);
+} while (!Util::CheckForWin(game_mm, game_mm.move_played, ((i_mm++) % 2 == 0 ? PLAYER : COMPUTER)));
+#endif
 }
