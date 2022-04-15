@@ -1,8 +1,6 @@
 #include "Algorithms.h"
 
 int Algorithms::MinMax(Game &game) {
-    //    if (game.depth == 0)
-    //      return (WIDTH - 1) / 2;
     game.depth = 0;
     pair<int, int> res = MaxValue(game);
     cout << res.first << " " << res.second << "\n";
@@ -10,11 +8,8 @@ int Algorithms::MinMax(Game &game) {
 }
 
 pair<int, int> Algorithms::MaxValue(Game &game) {
-    if (game.depth == MAX_DEPTH)
-        return {Util::UtilityFunction(game, game.move_played, PLAYER), game.move_played};
-    if (Util::CheckForWin(game, game.move_played, PLAYER)) return {-512, game.move_played};
-    if (Util::CheckForWin(game, game.move_played, COMPUTER)) return {512, game.move_played};
-    if (game.counter == 42) return {0, game.move_played};
+    if (game.depth == MAX_DEPTH || Util::CheckForWin(game, game.move_played) || game.counter == 42)
+        return {Util::UtilityFunction(game, game.move_played), game.move_played};
 
     pair<int, int> value = {INT_MIN, -1};
     vector<Game> children;
@@ -29,13 +24,35 @@ pair<int, int> Algorithms::MaxValue(Game &game) {
     return value;
 }
 
+int Algorithms::NewMinMax(Game &game, int depth, bool is_maximizing) {
+    if (depth == 0 || Util::CheckForWin(game, game.move_played) || game.counter == 42)
+        return Util::UtilityFunction(game, game.move_played);
+
+    if (is_maximizing) {
+        int best_value = INT_MIN;
+        vector<Game> children;
+        Util::CreateChildren(game, children, PLAYER);
+        for (Game child : children) {
+            int value = NewMinMax(child, depth - 1, false);
+            best_value = max(best_value, value);
+        }
+        return best_value;
+    } else {
+        int best_value = INT_MAX;
+        vector<Game> children;
+        Util::CreateChildren(game, children, COMPUTER);
+        for (Game child : children) {
+            int value = NewMinMax(child, depth - 1, true);
+            best_value = min(best_value, value);
+        }
+        return best_value;
+    }
+}
+
 // {score, movePlayed}
 pair<int, int> Algorithms::MinValue(Game &game) {
-    if (game.depth == MAX_DEPTH)
-        return {Util::UtilityFunction(game, game.move_played, COMPUTER), game.move_played};
-    if (Util::CheckForWin(game, game.move_played, PLAYER)) return {-512, game.move_played};
-    if (Util::CheckForWin(game, game.move_played, COMPUTER)) return {512, game.move_played};
-    if (game.counter == 42) return {0, game.move_played};
+    if (game.depth == MAX_DEPTH || Util::CheckForWin(game, game.move_played) || game.counter == 42)
+        return {Util::UtilityFunction(game, game.move_played), game.move_played};
 
     pair<int, int> value = {INT_MAX, -1};
     vector<Game> children;
@@ -53,7 +70,7 @@ pair<int, int> Algorithms::MinValue(Game &game) {
 int Algorithms::Simulate(Node &node) {
     Node simulation = node;
     int move = rand() % WIDTH;
-    while (!Util::CheckForWin(simulation.game, simulation.game.move_played, simulation.symbol) && simulation.game.counter < WIDTH * HEIGHT) {
+    while (!Util::CheckForWin(simulation.game, simulation.game.move_played) && simulation.game.counter < WIDTH * HEIGHT) {
         move = rand() % WIDTH;
         while (!Util::MakeMove(move, simulation.game, Util::GetNextSymbol(simulation.symbol)))
             move = rand() % WIDTH;
@@ -63,7 +80,7 @@ int Algorithms::Simulate(Node &node) {
 
     // Util::PrintGame(simulation.game);
 
-    if (Util::CheckForWin(simulation.game, simulation.game.move_played, simulation.symbol))
+    if (Util::CheckForWin(simulation.game, simulation.game.move_played))
         if (simulation.symbol == PLAYER)
             return -1;
         else
@@ -102,7 +119,7 @@ int Algorithms::MonteCarloTreeSearch(shared_ptr<Node> root) {
     // }
     for (int i = 0; i < 10'000'000; i++) {
         shared_ptr<Node> node = Algorithms::Select(root);
-        if (!Util::CheckForWin(node->game, node->game.move_played, node->symbol) && node->game.counter < 42)
+        if (!Util::CheckForWin(node->game, node->game.move_played) && node->game.counter < 42)
             Algorithms::Expand(node);
 
         if (node->children.size() > 0)

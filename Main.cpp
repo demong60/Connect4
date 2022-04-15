@@ -12,21 +12,34 @@ int main() {
     game.counter = 0;
     game.move_played = 3;
 
-    // do {
-    //     if (i % 2 == 0) {
-    //         cout << "Player's turn\n";
-    //         cin >> last_played;
-    //         Util::MakeMove(last_played, game, PLAYER);
-    //     } else {
-    //         cout << "Computer playing...\n";
-    //         last_played = Algorithms::MonteCarloTreeSearch(game);
-    //         Util::MakeMove(last_played, game, COMPUTER);
-    //     }
+    do {
+        if (i++ % 2 == 0) {
+            cout << "Player's turn\n";
+            cin >> last_played;
+            Util::MakeMove(last_played, game, PLAYER);
+        } else {
+            cout << "Computer playing...\n";
 
-    //     Util::PrintGame(game);
-    // } while (!Util::CheckForWin(game, game.move_played, ((i++) % 2 == 0 ? PLAYER : COMPUTER)));
+            vector<Game> possible_moves;
+            Util::CreateChildren(game, possible_moves, COMPUTER);
 
-    // int moves[] = {3, 0, 2, 0, 5, 4, 3, 0};
+            int best_value = INT_MIN;
+            int best_move;
+
+            for (Game child : possible_moves) {
+                int move_score = Algorithms::NewMinMax(child, MAX_DEPTH, false);
+                if (move_score > best_value) {
+                    best_value = move_score;
+                    best_move = child.move_played;
+                }
+            }
+            Util::MakeMove(best_move, game, COMPUTER);
+        }
+
+        Util::PrintGame(game);
+    } while (!Util::CheckForWin(game, game.move_played));
+
+    // int moves[] = {3, 2, 4, 6, 5, 0};
     // for (int m : moves) {
     //     Util::MakeMove(m, game, ((i++) % 2 == 0 ? PLAYER : COMPUTER));
     // }
@@ -41,31 +54,31 @@ int main() {
     //     cout << Util::UtilityFunction(child, child.move_played, COMPUTER) << "\n";
     // }
 
-    srand(time(NULL));
+    // srand(time(NULL));
 
-    vector<int> moveList;
-    shared_ptr<Node> root = make_shared<Node>(game, PLAYER);
-    root->parent = nullptr;
+    // vector<int> moveList;
+    // shared_ptr<Node> root = make_shared<Node>(game, PLAYER);
+    // root->parent = nullptr;
 
-    do {
-        if (i % 2 == 0) {
-            cout << "Player's turn\n";
-            cin >> last_played;
-        } else {
-            cout << "Computer playing...\n";
-            last_played = Algorithms::MonteCarloTreeSearch(root);
-        }
+    // do {
+    //     if (i % 2 == 0) {
+    //         cout << "Player's turn\n";
+    //         cin >> last_played;
+    //     } else {
+    //         cout << "Computer playing...\n";
+    //         last_played = Algorithms::MonteCarloTreeSearch(root);
+    //     }
 
-        for (auto child : root->children) {
-            if (child->game.move_played == last_played) {
-                root = child;
-                break;
-            }
-        }
-        root->parent = nullptr;
-        Util::PrintGame(root->game);
-        cout << last_played << "\n";
-    } while (!Util::CheckForWin(root->game, root->game.move_played, ((i++) % 2 == 0 ? PLAYER : COMPUTER)) && root->game.counter != 42);
+    //     for (auto child : root->children) {
+    //         if (child->game.move_played == last_played) {
+    //             root = child;
+    //             break;
+    //         }
+    //     }
+    //     root->parent = nullptr;
+    //     Util::PrintGame(root->game);
+    //     cout << last_played << "\n";
+    // } while (!Util::CheckForWin(root->game, root->game.move_played, ((i++) % 2 == 0 ? PLAYER : COMPUTER)) && root->game.counter != 42);
 
     // cin >> n;
     // for (i = 0; i < n; i++) {

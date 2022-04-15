@@ -10,6 +10,8 @@ namespace Algorithms {
  */
 int MinMax(Game &game);
 
+int NewMinMax(Game &game, int depth, bool is_maximizing);
+
 pair<int, int> MaxValue(Game &game);
 
 pair<int, int> MinValue(Game &game);

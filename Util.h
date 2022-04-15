@@ -7,7 +7,7 @@ using namespace std;
 #define COMPUTER 'X'
 #define PLAYER 'O'
 
-#define MAX_DEPTH 2
+#define MAX_DEPTH 7
 #define MAX_SCORE 512
 
 #include "Game.h"
@@ -20,8 +20,8 @@ int CountSegments(array<array<char, WIDTH>, HEIGHT> &board, pair<int, int> pos, 
 bool MakeMove(int col, Game &game, char symbol);
 void PrintGame(Game &game);
 void CreateChildren(Game &game, vector<Game> &children, char symbol);
-bool CheckForWin(Game &game, int col, char symbol);
-int UtilityFunction(Game &game, int move, char symbol);
+bool CheckForWin(Game &game, int col);
+int UtilityFunction(Game &game, int move);
 int GetValueForSegment(pair<int, int> segment_results);
 char GetNextSymbol(char symbol);
 double CalculateUCB(Node &node);

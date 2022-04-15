@@ -52,8 +52,9 @@ int Util::CountSegments(array<array<char, WIDTH>, HEIGHT> &board, pair<int, int>
 }
 
 // Symbol == Last player
-int Util::UtilityFunction(Game &game, int move, char symbol) {
-    if (CheckForWin(game, move, symbol))
+int Util::UtilityFunction(Game &game, int move) {
+    char symbol = game.board[game.positions_played[move]][move];
+    if (CheckForWin(game, move))
         return game.utility_value = (symbol == COMPUTER ? MAX_SCORE : -MAX_SCORE);
 
     // Check for draw - implement counter
@@ -109,9 +110,12 @@ bool Util::MakeMove(int col, Game &game, char symbol) {
     return true;
 }
 
-bool Util::CheckForWin(Game &game, int col, char symbol) {
+bool Util::CheckForWin(Game &game, int col) {
     // Check horizontal
-    int sum = game.board[game.positions_played[col]][col] == symbol;
+    char symbol = game.board[game.positions_played[col]][col];
+    if (symbol == ' ')
+        return false;
+    int sum = 1;
     int currentRow = game.positions_played[col];
     for (int colI = 1; colI <= 3 && col - colI >= 0; colI++)
         if (game.board[currentRow][col - colI] == symbol)
