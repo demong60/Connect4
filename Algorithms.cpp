@@ -1,5 +1,7 @@
 #include "Algorithms.h"
 
+const int MAX_ITER = 12; // para mudar temporariamente a search do alfa-beta (no fim retirar)
+
 int Algorithms::MinMax(Game &game) {
     // ========================================================
     /* 
@@ -157,7 +159,7 @@ int Algorithms::MinMaxWithAlphaBetaPruning(Game &game){
 }
 
 pair<int, int> Algorithms::MaxValue(Game &game, pair<int, int> alpha, pair<int, int> beta) {
-    if (game.depth == MAX_DEPTH)
+    if (game.depth == MAX_ITER)
         return {Util::UtilityFunction(game, game.move_played, PLAYER), game.move_played};
     if (Util::CheckForWin(game, game.move_played, PLAYER)) return {-512, game.move_played};
     if (Util::CheckForWin(game, game.move_played, COMPUTER)) return {512, game.move_played};
@@ -179,7 +181,7 @@ pair<int, int> Algorithms::MaxValue(Game &game, pair<int, int> alpha, pair<int, 
 
 // {score, movePlayed}
 pair<int, int> Algorithms::MinValue(Game &game, pair<int, int> alpha, pair<int, int> beta) {
-    if (game.depth == MAX_DEPTH)
+    if (game.depth == MAX_ITER)
         return {Util::UtilityFunction(game, game.move_played, COMPUTER), game.move_played};
     if (Util::CheckForWin(game, game.move_played, PLAYER)) return {-512, game.move_played};
     if (Util::CheckForWin(game, game.move_played, COMPUTER)) return {512, game.move_played};
