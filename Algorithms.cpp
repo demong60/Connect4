@@ -100,7 +100,7 @@ int Algorithms::MonteCarloTreeSearch(shared_ptr<Node> root) {
     //     best_move = 3;
     //     done = true;
     // }
-    for (int i = 0; i < 10'0'000; i++) {
+    for (int i = 0; i < 10'000'000; i++) {
         shared_ptr<Node> node = Algorithms::Select(root);
         if (!Util::CheckForWin(node->game, node->game.move_played, node->symbol) && node->game.counter < 42)
             Algorithms::Expand(node);

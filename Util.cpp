@@ -228,7 +228,7 @@ double Util::CalculateUCB(Node &node) {
     if (node.visited == 0)
         return INT_MAX;
 
-    double C = 20;
+    double C = 200;
     return (node.total + C * (sqrt((double)(2 * log((double)node.parent->visited)) / (double)node.visited)));
 }
 
