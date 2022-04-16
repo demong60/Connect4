@@ -1,8 +1,17 @@
 #include "Util.h"
-/* Leave the algorithm we want to use uncommented */
-// #define MONTE_CARLO
-//#define ALPHA_BETA
-// #define MINIMAX
+
+void min_max();
+void alfa_beta();
+
+int main() {
+    // ios::sync_with_stdio(0);
+    // cin.tie(0);
+    // min_max();
+    alfa_beta();
+    
+}
+
+
 
 void min_max(){
     int i = 1;  // Even == PLAYER starts Odd == COMPUTER starts
@@ -49,6 +58,7 @@ void alfa_beta(){
     game_ab.counter = 0;
     game_ab.move_played = 3;
 
+    int cl = system("clear"); 
     cout << "Select who goes first:\n" << "(0) Computer\n" << "(1) Player\n";
     bool who_plays = false;  // true = PLAYER   ||   false = COMPUTER
     cin >> who_plays;
@@ -73,13 +83,7 @@ void alfa_beta(){
 
 }
 
-int main() {
-    // ios::sync_with_stdio(0);
-    // cin.tie(0);
-    // min_max();
-    alfa_beta();
-    
-}
+
 
 // NAO APAGAR
 
