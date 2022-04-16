@@ -157,8 +157,6 @@ int Algorithms::MonteCarloTreeSearch(shared_ptr<Node> root) {
 int Algorithms::MinMaxWithAlphaBetaPruning(Game &game) {
     int alpha = INT_MIN, beta = INT_MAX;
     int MAX_ITER = 10;
-
-    cout << "Searching depth " << MAX_ITER << "...\n";
     vector<Game> children;
     Util::CreateChildren(game, children, COMPUTER);
     pair<int, int> ans = {INT_MIN, -1};
