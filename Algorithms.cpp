@@ -1,6 +1,7 @@
 #include "Algorithms.h"
 
-const int MAX_ITER = 10;  // para mudar temporariamente a search do alfa-beta (no fim retirar)
+// No more than 10 for alfa-beta or it takes too long.. :-(
+const int MAX_ITER = 11;  // para mudar temporariamente a search do alfa-beta (no fim retirar)
 
 int Algorithms::MinMax(Game &game) {
     // ========================================================
@@ -157,63 +158,61 @@ int Algorithms::MonteCarloTreeSearch(shared_ptr<Node> root) {
 }
 
 int Algorithms::MinMaxWithAlphaBetaPruning(Game &game) {
-    // game.depth = 0;
-    // ========================================================
-    /*
-        Para já os nossos min-max e alpha-beta dependem de
-        que o game.move_played seja uma posição entre 0 e 6
-        Se não fizermos esta linha a posição vai ser random - ex: 321224 (que obviamente está fora do indice do array)
-        e por isso daria seg-fault
-        podemos evitar ter de fazer isto, mas temos de arranjar uma alternativa para a primeira jogada
-        ou fazer um if_statement em baixo
-    */
-    // if (game.depth == 0)
-    //      return (WIDTH - 1) / 2;
     game.depth = 0;
-    // ========================================================
-    pair<int, int> alpha = {INT_MIN, -1}, beta = {INT_MAX, -1};
-    pair<int, int> res = Algorithms::MaxValue(game, alpha, beta);
-    return res.second;
+    int alpha = INT_MIN, beta = INT_MAX;
+    vector<Game> children;
+    Util::CreateChildren(game, children, COMPUTER);
+    pair<int, int> ans = {INT_MIN, -1};
+    for(auto child : children){
+        child.depth = 0;
+        int res = Algorithms::MinValue(child, alpha, beta);
+        if(res > ans.first){
+            ans.first = res;
+            ans.second = child.move_played;
+        }
+    }
+    return ans.second;
 }
+    
+    
+    
 
-pair<int, int> Algorithms::MaxValue(Game &game, pair<int, int> alpha, pair<int, int> beta) {
+int Algorithms::MaxValue(Game &game, int alpha, int beta) {
     if (game.depth == MAX_ITER)
-        return {Util::UtilityFunction(game, game.move_played), game.move_played};
-    if (Util::CheckForWin(game, game.move_played)) return {-512, game.move_played};
-    if (Util::CheckForWin(game, game.move_played)) return {512, game.move_played};
-    if (game.counter == 42) return {0, game.move_played};
+        return Util::UtilityFunction(game, game.move_played);
+    if (Util::CheckForWin(game, game.move_played)) return -512;
+    if (game.counter == 42) return 0;
 
-    pair<int, int> value = {INT_MIN, -1};
+    int value = INT_MIN;
     vector<Game> children;
     Util::CreateChildren(game, children, COMPUTER);
     for (Game child : children) {
-        pair<int, int> cur = MinValue(child, alpha, beta);
+        int cur = MinValue(child, alpha, beta);
 
-        if (cur.first > value.first) value = cur;
-        if (cur.first >= beta.first) return beta;
-        if (cur.first > alpha.first) alpha = cur;
+        if (cur > value) value = cur;
+        if (cur >= beta) return beta;
+        if (cur > alpha) alpha = cur;
     }
 
     return value;
 }
 
 // {score, movePlayed}
-pair<int, int> Algorithms::MinValue(Game &game, pair<int, int> alpha, pair<int, int> beta) {
+int Algorithms::MinValue(Game &game, int alpha, int beta) {
     if (game.depth == MAX_ITER)
-        return {Util::UtilityFunction(game, game.move_played), game.move_played};
-    if (Util::CheckForWin(game, game.move_played)) return {-512, game.move_played};
-    if (Util::CheckForWin(game, game.move_played)) return {512, game.move_played};
-    if (game.counter == 42) return {0, game.move_played};
+        return Util::UtilityFunction(game, game.move_played);
+    if (Util::CheckForWin(game, game.move_played)) return 512;
+    if (game.counter == 42) return 0;
 
-    pair<int, int> value = {INT_MAX, -1};
+    int value = INT_MAX;
     vector<Game> children;
     Util::CreateChildren(game, children, PLAYER);
     for (Game child : children) {
-        pair<int, int> cur = MaxValue(child, alpha, beta);
+        int cur = MaxValue(child, alpha, beta);
 
-        if (cur.first < value.first) value = cur;
-        if (cur.first <= alpha.first) return alpha;
-        if (cur.first < beta.first) beta = cur;
+        if (cur < value) value = cur;
+        if (cur <= alpha) return alpha;
+        if (cur < beta) beta = cur;
     }
 
     return value;
