@@ -198,30 +198,30 @@ void Util::PrintGame(Game &game) {
 // Returns a vector with the children of a given game
 // Children are middle->out
 void Util::CreateChildren(Game &game, vector<Game> &children, char symbol) {
-    // int middle = (WIDTH - 1) / 2;
+    int middle = (WIDTH - 1) / 2;
 
-    // Game child = game;
-    // if (MakeMove(middle, child, symbol))
-    //     children.push_back(child);
+    Game child = game;
+    if (MakeMove(middle, child, symbol))
+        children.push_back(child);
 
-    // for (int offset = 1; offset <= (WIDTH - 1) / 2; offset++) {
-    //     // Right hand side
-    //     child = game;
-    //     if (MakeMove(middle + offset, child, symbol)) {
-    //         children.push_back(child);
-    //     }
-
-    //     // Left hand side
-    //     child = game;
-    //     if (MakeMove(middle - offset, child, symbol)) {
-    //         children.push_back(child);
-    //     }
-    // }
-    for (int i = 0; i < WIDTH; i++) {
-        Game child = game;
-        if (MakeMove(i, child, symbol))
+    for (int offset = 1; offset <= (WIDTH - 1) / 2; offset++) {
+        // Right hand side
+        child = game;
+        if (MakeMove(middle + offset, child, symbol)) {
             children.push_back(child);
+        }
+
+        // Left hand side
+        child = game;
+        if (MakeMove(middle - offset, child, symbol)) {
+            children.push_back(child);
+        }
     }
+    // for (int i = 0; i < WIDTH; i++) {
+    //     Game child = game;
+    //     if (MakeMove(i, child, symbol))
+    //         children.push_back(child);
+    // }
 }
 
 char Util::GetNextSymbol(char symbol) {

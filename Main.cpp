@@ -8,12 +8,9 @@ int main() {
     // cin.tie(0);
     // min_max();
     alfa_beta();
-    
 }
 
-
-
-void min_max(){
+void min_max() {
     int i = 1;  // Even == PLAYER starts Odd == COMPUTER starts
     int last_played;
 
@@ -52,16 +49,18 @@ void min_max(){
     srand(time(NULL));
 }
 
-void alfa_beta(){
+void alfa_beta() {
     Game game_ab;
     game_ab.depth = 0;
     game_ab.counter = 0;
     game_ab.move_played = 3;
 
-    int cl = system("clear"); 
-    cout << "Select who goes first:\n" << "(0) Computer\n" << "(1) Player\n";
+    int cl = system("clear");
+    cout << "Select who goes first:\n"
+         << "(0) Computer\n"
+         << "(1) Player\n";
     bool who_plays = false;  // true = PLAYER   ||   false = COMPUTER
-    cin >> who_plays;
+    // cin >> who_plays;
     int last_played_ab;
 
     Util::PrintGame(game_ab);
@@ -80,10 +79,7 @@ void alfa_beta(){
         Util::PrintGame(game_ab);
         who_plays = !who_plays;
     } while (!Util::CheckForWin(game_ab, game_ab.move_played));
-
 }
-
-
 
 // NAO APAGAR
 
