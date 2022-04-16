@@ -1,7 +1,7 @@
 #include "Algorithms.h"
 
 // No more than 10 for alfa-beta or it takes too long.. :-(
-const int MAX_ITER = 11;  // para mudar temporariamente a search do alfa-beta (no fim retirar)
+const int MAX_ITER = 10;  // para mudar temporariamente a search do alfa-beta (no fim retirar)
 
 int Algorithms::MinMax(Game &game) {
     // ========================================================
