@@ -90,13 +90,13 @@ void Algorithms::Expand(shared_ptr<Node> node) {
 
 int Algorithms::MonteCarloTreeSearch(shared_ptr<Node> root) {
     int best_move;
-    for (int i = 0; i < 10'000'000; i++) {
+    for (int i = 0; i < 1'000'000; i++) {
         shared_ptr<Node> node = Algorithms::Select(root);
         if (!Util::CheckForWin(node->game, node->game.move_played) && node->game.counter < 42)
             Algorithms::Expand(node);
 
         if (node->children.size() > 0)
-            node = node->children[rand() % node->children.size()];
+            node = node->children[0];
 
         int value = Algorithms::Simulate(*node);
         Algorithms::Backpropagate(*node, value);
