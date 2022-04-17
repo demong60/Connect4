@@ -2,7 +2,6 @@
 
 array<array<char, WIDTH>, HEIGHT> board;
 array<int, WIDTH> positions_played;
-vector<pair<int, int>> won_positions;
 int utility_value;
 int depth;
 int counter;

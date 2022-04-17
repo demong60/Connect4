@@ -21,7 +21,6 @@ bool MakeMove(int col, Game &game, char symbol);
 void PrintGame(Game &game);
 void CreateChildren(Game &game, vector<Game> &children, char symbol);
 bool CheckForWin(Game &game, int col);
-bool IsVictoriousPiece(Game &game, int row, int col);
 int UtilityFunction(Game &game, int move);
 int GetValueForSegment(pair<int, int> segment_results);
 char GetNextSymbol(char symbol);

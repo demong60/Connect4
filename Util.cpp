@@ -1,19 +1,5 @@
 #include "Util.h"
 
-const std::string red("\033[0;31m");
-const std::string red_underlined("\033[0;31;4m");
-const std::string green("\033[1;32m");
-const std::string green_underlined("\033[1;32;4m");
-// const std::string yellow("\033[1;33m");
-// const std::string cyan("\033[0;36m");
-// const std::string magenta("\033[0;35m");
-const std::string yellow_background_red_text("\033[1;31;103m");
-const std::string yellow_background_green_text("\033[1;32;103m");
-
-
-const std::string end_color("\033[0m");
-
-
 pair<int, int> move_down_right = {1, 1};  // Percorrer a diagonal no sentido sudeste
 pair<int, int> move_up_right = {-1, 1};   // Percorrer a diagonal no sentido nordeste
 pair<int, int> move_right = {0, 1};       // Percorrer uma linha no sentido este
@@ -127,133 +113,71 @@ bool Util::MakeMove(int col, Game &game, char symbol) {
 bool Util::CheckForWin(Game &game, int col) {
     // Check horizontal
     char symbol = game.board[game.positions_played[col]][col];
-    game.won_positions.push_back(make_pair(game.positions_played[col], col));
-
     if (symbol == ' ')
         return false;
     int sum = 1;
     int currentRow = game.positions_played[col];
     for (int colI = 1; colI <= 3 && col - colI >= 0; colI++)
-        if (game.board[currentRow][col - colI] == symbol){
-            game.won_positions.push_back(make_pair(currentRow, col - colI));
+        if (game.board[currentRow][col - colI] == symbol)
             sum++;
-        }
         else
             break;
     for (int colI = 1; colI <= 3 && col + colI < WIDTH; colI++)
-        if (game.board[currentRow][col + colI] == symbol){
+        if (game.board[currentRow][col + colI] == symbol)
             sum++;
-            game.won_positions.push_back(make_pair(currentRow, col + colI));
-        }
         else
             break;
-    if (sum >= 4){
+    if (sum >= 4)
         return true;
-    } else game.won_positions.clear();
 
     sum = game.board[game.positions_played[col]][col] == symbol;
-    game.won_positions.push_back(make_pair(game.positions_played[col], col));
-
     // Check vertical
     for (int rowI = 1; rowI <= 3 && rowI < HEIGHT; rowI++)
-        if (game.board[currentRow + rowI][col] == symbol){
+        if (game.board[currentRow + rowI][col] == symbol)
             sum++;
-            game.won_positions.push_back(make_pair(currentRow + rowI, col));
-        }
         else
             break;
-    if (sum >= 4){
+    if (sum >= 4)
         return true;
-    } else game.won_positions.clear();
 
     sum = game.board[game.positions_played[col]][col] == symbol;
-    game.won_positions.push_back(make_pair(game.positions_played[col], col));
-
     // Check main diagonal
     for (int i = 1; i <= 3 && currentRow - i >= 0 && col + i < WIDTH; i++)
-        if (game.board[currentRow - i][col + i] == symbol){
+        if (game.board[currentRow - i][col + i] == symbol)
             sum++;
-            game.won_positions.push_back(make_pair(currentRow - i, col + i));
-        }
         else
             break;
     for (int i = 1; i <= 3 && currentRow + i < HEIGHT && col - i >= 0; i++)
-        if (game.board[currentRow + i][col - i] == symbol){
+        if (game.board[currentRow + i][col - i] == symbol)
             sum++;
-            game.won_positions.push_back(make_pair(currentRow + i, col - i));
-        }
         else
             break;
-    if (sum >= 4){
+    if (sum >= 4)
         return true;
-    } else game.won_positions.clear();
 
     sum = game.board[game.positions_played[col]][col] == symbol;
-    game.won_positions.push_back(make_pair(game.positions_played[col], col));
-
     // Check secondary diagonal
     for (int i = 1; i <= 3 && currentRow - i >= 0 && col - i >= 0; i++)
-        if (game.board[currentRow - i][col - i] == symbol){
+        if (game.board[currentRow - i][col - i] == symbol)
             sum++;
-            game.won_positions.push_back(make_pair(currentRow - i, col - i));
-        }
         else
             break;
     for (int i = 1; i <= 3 && currentRow + i < HEIGHT && col + i < WIDTH; i++)
-        if (game.board[currentRow + i][col + i] == symbol){
+        if (game.board[currentRow + i][col + i] == symbol)
             sum++;
-            game.won_positions.push_back(make_pair(currentRow + i, col + i));
-        }
         else
             break;
 
-    if(sum < 4) game.won_positions.clear();
     return sum >= 4;
-}
-
-bool Util::IsVictoriousPiece(Game &game, int row, int col){
-    for(auto position : game.won_positions){
-        if(position.first == row && position.second == col) return true;
-    }
-    return false;
 }
 
 void Util::PrintGame(Game &game) {
     int n = system("clear");
-    bool last_played_colored = false;
     for (int row = 0; row < HEIGHT; row++) {
         for (int col = 0; col < WIDTH; col++) {
             if (col == 0)
                 cout << "| ";
-            if(!last_played_colored && col == game.move_played && game.board[row][col] != ' '){
-                last_played_colored = true;
-                if(game.board[row][col] == COMPUTER){
-                    if(IsVictoriousPiece(game, row, col)){
-                        cout << yellow_background_green_text << game.board[row][col] << end_color << " | ";
-                    }
-                    else cout << green_underlined << game.board[row][col] << end_color << " | ";
-                }
-                else{
-                    if(IsVictoriousPiece(game, row, col)){
-                        cout << yellow_background_red_text << game.board[row][col] << end_color << " | ";
-                    }
-                    else cout << red_underlined << game.board[row][col] << end_color << " | ";
-                }
-                
-            } else{
-                if(game.board[row][col] == COMPUTER){
-                    if(IsVictoriousPiece(game, row, col)){
-                        cout << yellow_background_green_text << game.board[row][col] << end_color << " | ";
-                    }
-                    else cout << green << game.board[row][col] << end_color << " | ";
-                }
-                else{
-                    if(IsVictoriousPiece(game, row, col)){
-                        cout << yellow_background_red_text << game.board[row][col] << end_color << " | ";
-                    }
-                    cout << red << game.board[row][col] << end_color << " | ";
-                }
-            }
+            cout << game.board[row][col] << " | ";
         }
         cout << "\n";
     }
