@@ -8,6 +8,15 @@ int main() {
     srand(time(NULL));
 
     int cl = system("clear");
+
+    cout << "Select the algorithm the bot will use: \n"
+         << "(0) MiniMax\n"
+         << "(1) MiniMax with Alpha-Beta Pruning\n"
+         << "(2) Monte Carlo Tree Search\n";
+    int algo = 0;
+    cin >> algo;
+
+    cl = system("clear");
     cout << "Select who goes first:\n"
          << "(0) Computer\n"
          << "(1) Player\n";
@@ -16,9 +25,20 @@ int main() {
     cin >> who_plays;
 
     Game game;
-    // game = MinMax(who_plays);
-    // game = MonteCarlo(who_plays);
-    game = AlphaBeta(who_plays);
+    switch (algo) {
+        case 0:
+            game = MinMax(who_plays);
+            break;
+        case 1:
+            game = AlphaBeta(who_plays);
+            break;
+        case 2:
+            game = MonteCarlo(who_plays);
+            break;
+        default:
+            game = MinMax(who_plays);
+            break;
+    }
 
     if (Util::CheckForWin(game, game.move_played)) {
         vector<pair<int, int>> winning_positions = Util::GetWinSegment(game, game.move_played);
@@ -35,6 +55,7 @@ Game MinMax(bool who_plays) {
     game.move_played = 3;
 
     do {
+        Util::PrintGame(game);
         if (who_plays) {
             cout << "Player's turn\n";
             cin >> last_played;
@@ -46,6 +67,7 @@ Game MinMax(bool who_plays) {
         }
 
         Util::PrintGame(game);
+        who_plays = !who_plays;
     } while (!Util::CheckForWin(game, game.move_played));
 
     return game;
@@ -58,13 +80,15 @@ Game MonteCarlo(bool who_plays) {
     game.move_played = 3;
 
     int last_played;
-    shared_ptr<Node> root = make_shared<Node>(game, PLAYER);
+    shared_ptr<Node> root = make_shared<Node>(game, who_plays == 0 ? PLAYER : COMPUTER);
 
-    Util::PrintGame(game);
     do {
+        Util::PrintGame(root->game);
         if (who_plays) {
             cout << "Player's turn\n";
             cin >> last_played;
+            if (root->game.counter == 0)  // For when the player starts
+                Algorithms::Expand(root);
         } else {
             cout << "Computer playing...\n";
             last_played = Algorithms::MonteCarloTreeSearch(root);
