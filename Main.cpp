@@ -117,6 +117,10 @@ void alfa_beta() {
         Util::PrintGame(game_ab);
         who_plays = !who_plays;
     } while (!Util::CheckForWin(game_ab, game_ab.move_played));
+    if(Util::CheckForWin(game_ab, game_ab.move_played)){
+        vector<pair<int, int>> winning_positions = Util::GetWinSegment(game_ab, game_ab.move_played);
+        Util::PrintVictoriousGame(game_ab);
+    }
 }
 
 // NAO APAGAR
