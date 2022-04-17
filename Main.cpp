@@ -45,7 +45,6 @@ void min_max() {
 
         Util::PrintGame(game);
     } while (!Util::CheckForWin(game, game.move_played));
-
     srand(time(NULL));
 }
 
@@ -79,6 +78,9 @@ void alfa_beta() {
         Util::PrintGame(game_ab);
         who_plays = !who_plays;
     } while (!Util::CheckForWin(game_ab, game_ab.move_played));
+    if(Util::CheckForWin(game_ab, game_ab.move_played)){
+        Util::PrintGame(game_ab); // PRINT WIN COLORS
+    }
 }
 
 // NAO APAGAR
