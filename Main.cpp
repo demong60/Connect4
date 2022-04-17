@@ -2,12 +2,14 @@
 
 void min_max();
 void alfa_beta();
+void MonteCarlo();
 
 int main() {
     // ios::sync_with_stdio(0);
     // cin.tie(0);
     // min_max();
-    alfa_beta();
+    srand(time(NULL));
+    MonteCarlo();
 }
 
 void min_max() {
@@ -45,8 +47,44 @@ void min_max() {
 
         Util::PrintGame(game);
     } while (!Util::CheckForWin(game, game.move_played));
+}
 
-    srand(time(NULL));
+void MonteCarlo() {
+    Game game;
+    game.depth = 0;
+    game.counter = 0;
+    game.move_played = 3;
+
+    int cl = system("clear");
+    cout << "Select who goes first:\n"
+         << "(0) Computer\n"
+         << "(1) Player\n";
+    bool who_plays = false;  // true = PLAYER   ||   false = COMPUTER
+    // cin >> who_plays;
+    int last_played;
+
+    shared_ptr<Node> root = make_shared<Node>(game, PLAYER);
+
+    Util::PrintGame(game);
+    do {
+        if (who_plays) {
+            cout << "Player's turn\n";
+            cin >> last_played;
+        } else {
+            cout << "Computer playing...\n";
+            last_played = Algorithms::MonteCarloTreeSearch(root);
+        }
+
+        for (auto child : root->children) {
+            if (child->game.move_played == last_played) {
+                root = child;
+                root->parent = nullptr;
+                break;
+            }
+        }
+        Util::PrintGame(root->game);
+        who_plays = !who_plays;
+    } while (!Util::CheckForWin(root->game, root->game.move_played));
 }
 
 void alfa_beta() {
