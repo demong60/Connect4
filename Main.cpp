@@ -1,19 +1,32 @@
 #include "Util.h"
 
-void min_max();
-void alfa_beta();
-void MonteCarlo();
+Game MinMax(bool who_plays);
+Game AlphaBeta(bool who_plays);
+Game MonteCarlo(bool who_plays);
 
 int main() {
-    // ios::sync_with_stdio(0);
-    // cin.tie(0);
-    // min_max();
     srand(time(NULL));
-    MonteCarlo();
+
+    int cl = system("clear");
+    cout << "Select who goes first:\n"
+         << "(0) Computer\n"
+         << "(1) Player\n";
+
+    bool who_plays = false;  // true = PLAYER   ||   false = COMPUTER
+    cin >> who_plays;
+
+    Game game;
+    // game = MinMax(who_plays);
+    // game = MonteCarlo(who_plays);
+    game = AlphaBeta(who_plays);
+
+    if (Util::CheckForWin(game, game.move_played)) {
+        vector<pair<int, int>> winning_positions = Util::GetWinSegment(game, game.move_played);
+        Util::PrintVictoriousGame(game);
+    }
 }
 
-void min_max() {
-    int i = 1;  // Even == PLAYER starts Odd == COMPUTER starts
+Game MinMax(bool who_plays) {
     int last_played;
 
     Game game;
@@ -22,47 +35,29 @@ void min_max() {
     game.move_played = 3;
 
     do {
-        if (i++ % 2 == 0) {
+        if (who_plays) {
             cout << "Player's turn\n";
             cin >> last_played;
             Util::MakeMove(last_played, game, PLAYER);
         } else {
             cout << "Computer playing...\n";
-
-            vector<Game> possible_moves;
-            Util::CreateChildren(game, possible_moves, COMPUTER);
-
-            int best_value = INT_MIN;
-            int best_move;
-
-            for (Game child : possible_moves) {
-                int move_score = Algorithms::NewMinMax(child, MAX_DEPTH, false);
-                if (move_score > best_value) {
-                    best_value = move_score;
-                    best_move = child.move_played;
-                }
-            }
+            int best_move = Algorithms::MinMax(game);
             Util::MakeMove(best_move, game, COMPUTER);
         }
 
         Util::PrintGame(game);
     } while (!Util::CheckForWin(game, game.move_played));
+
+    return game;
 }
 
-void MonteCarlo() {
+Game MonteCarlo(bool who_plays) {
     Game game;
     game.depth = 0;
     game.counter = 0;
     game.move_played = 3;
 
-    int cl = system("clear");
-    cout << "Select who goes first:\n"
-         << "(0) Computer\n"
-         << "(1) Player\n";
-    bool who_plays = false;  // true = PLAYER   ||   false = COMPUTER
-    // cin >> who_plays;
     int last_played;
-
     shared_ptr<Node> root = make_shared<Node>(game, PLAYER);
 
     Util::PrintGame(game);
@@ -85,42 +80,35 @@ void MonteCarlo() {
         Util::PrintGame(root->game);
         who_plays = !who_plays;
     } while (!Util::CheckForWin(root->game, root->game.move_played));
+
+    return root->game;
 }
 
-void alfa_beta() {
-    Game game_ab;
-    game_ab.depth = 0;
-    game_ab.counter = 0;
-    game_ab.move_played = 3;
+Game AlphaBeta(bool who_plays) {
+    Game game;
+    game.depth = 0;
+    game.counter = 0;
+    game.move_played = 3;
 
-    int cl = system("clear");
-    cout << "Select who goes first:\n"
-         << "(0) Computer\n"
-         << "(1) Player\n";
-    bool who_plays = false;  // true = PLAYER   ||   false = COMPUTER
-    // cin >> who_plays;
-    int last_played_ab;
-
-    Util::PrintGame(game_ab);
+    int last_played;
+    Util::PrintGame(game);
     do {
         if (who_plays) {
             cout << "Player's turn\n";
-            cin >> last_played_ab;
-            Util::MakeMove(last_played_ab, game_ab, PLAYER);
-            game_ab.move_played = last_played_ab;
+            cin >> last_played;
+            Util::MakeMove(last_played, game, PLAYER);
+            game.move_played = last_played;
         } else {
             cout << "Computer playing...\n";
-            last_played_ab = Algorithms::MinMaxWithAlphaBetaPruning(game_ab);
-            Util::MakeMove(last_played_ab, game_ab, COMPUTER);
+            last_played = Algorithms::MinMaxWithAlphaBetaPruning(game);
+            Util::MakeMove(last_played, game, COMPUTER);
         }
 
-        Util::PrintGame(game_ab);
+        Util::PrintGame(game);
         who_plays = !who_plays;
-    } while (!Util::CheckForWin(game_ab, game_ab.move_played));
-    if(Util::CheckForWin(game_ab, game_ab.move_played)){
-        vector<pair<int, int>> winning_positions = Util::GetWinSegment(game_ab, game_ab.move_played);
-        Util::PrintVictoriousGame(game_ab);
-    }
+    } while (!Util::CheckForWin(game, game.move_played));
+
+    return game;
 }
 
 // NAO APAGAR

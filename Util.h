@@ -8,6 +8,7 @@ using namespace std;
 #define PLAYER 'O'
 
 #define MAX_DEPTH 7
+#define MAX_DEPTH_AB 10
 #define MAX_SCORE 512
 
 #include "Game.h"

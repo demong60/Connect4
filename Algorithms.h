@@ -9,12 +9,8 @@ namespace Algorithms {
  * @param game
  */
 int MinMax(Game &game);
-
-int NewMinMax(Game &game, int depth, bool is_maximizing);
-
-pair<int, int> MaxValue(Game &game);
-
-pair<int, int> MinValue(Game &game);
+int MaxValue(Game &game, int depth);
+int MinValue(Game &game, int depth);
 
 /**
  * @brief Applies the MinMax tree search WITH Alpha Beta Pruning to the given game and returns the best move

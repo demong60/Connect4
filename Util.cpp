@@ -1,17 +1,5 @@
 #include "Util.h"
 
-/* const std::string red("\033[0;31m");
-const std::string red_underlined("\033[0;31;4m");
-const std::string green("\033[1;32m");
-const std::string green_underlined("\033[1;32;4m");
-// const std::string yellow("\033[1;33m");
-// const std::string cyan("\033[0;36m");
-// const std::string magenta("\033[0;35m");
-const std::string yellow_background_red_text("\033[1;31;103m");
-const std::string yellow_background_green_text("\033[1;32;103m");
-const std::string end_color("\033[0m"); */
-
-
 pair<int, int> move_down_right = {1, 1};  // Percorrer a diagonal no sentido sudeste
 pair<int, int> move_up_right = {-1, 1};   // Percorrer a diagonal no sentido nordeste
 pair<int, int> move_right = {0, 1};       // Percorrer uma linha no sentido este
@@ -193,11 +181,11 @@ void Util::PrintGame(Game &game) {
         for (int col = 0; col < WIDTH; col++) {
             if (col == 0)
                 cout << "| ";
-            if(!underlined && col == game.move_played && game.board[row][col] != ' '){
+            if (!underlined && col == game.move_played && game.board[row][col] != ' ') {
                 underlined = true;
                 cout << (game.board[row][col] == COMPUTER ? red_underlined : green_underlined) << game.board[row][col] << end_color << " | ";
-            }
-            else cout << (game.board[row][col] == COMPUTER ? red : green) << game.board[row][col] << end_color << " | ";
+            } else
+                cout << (game.board[row][col] == COMPUTER ? red : green) << game.board[row][col] << end_color << " | ";
         }
         cout << "\n";
     }
@@ -215,7 +203,6 @@ void Util::PrintGame(Game &game) {
     cout << '\n';
 }
 
-
 vector<pair<int, int>> Util::GetWinSegment(Game &game, int col) {
     vector<pair<int, int>> win_segment;
     // Check horizontal
@@ -232,9 +219,10 @@ vector<pair<int, int>> Util::GetWinSegment(Game &game, int col) {
             win_segment.push_back(make_pair(currentRow, col + colI));
         else
             break;
-    if (win_segment.size() >= 4) 
+    if (win_segment.size() >= 4)
         return win_segment;
-    else win_segment.clear();
+    else
+        win_segment.clear();
 
     win_segment.push_back(make_pair(game.positions_played[col], col));
     // Check vertical
@@ -245,7 +233,8 @@ vector<pair<int, int>> Util::GetWinSegment(Game &game, int col) {
             break;
     if (win_segment.size() >= 4)
         return win_segment;
-    else win_segment.clear();
+    else
+        win_segment.clear();
 
     win_segment.push_back(make_pair(game.positions_played[col], col));
     // Check main diagonal
@@ -261,7 +250,8 @@ vector<pair<int, int>> Util::GetWinSegment(Game &game, int col) {
             break;
     if (win_segment.size() >= 4)
         return win_segment;
-    else win_segment.clear();
+    else
+        win_segment.clear();
 
     win_segment.push_back(make_pair(game.positions_played[col], col));
     // Check secondary diagonal
@@ -277,15 +267,14 @@ vector<pair<int, int>> Util::GetWinSegment(Game &game, int col) {
             break;
 
     // if (win_segment.size() >= 4)
-        return win_segment;
+    return win_segment;
 }
-bool Util::IsVictoriousPiece(vector<pair<int, int>> &won_positions, int row, int col){
-    for(auto position : won_positions){
-        if(position.first == row && position.second == col) return true;
+bool Util::IsVictoriousPiece(vector<pair<int, int>> &won_positions, int row, int col) {
+    for (auto position : won_positions) {
+        if (position.first == row && position.second == col) return true;
     }
     return false;
 }
-
 
 void Util::PrintVictoriousGame(Game &game) {
     const string red("\033[0;31m");
@@ -300,10 +289,10 @@ void Util::PrintVictoriousGame(Game &game) {
         for (int col = 0; col < WIDTH; col++) {
             if (col == 0)
                 cout << "| ";
-            if(IsVictoriousPiece(winning_positions, row, col)){
+            if (IsVictoriousPiece(winning_positions, row, col)) {
                 cout << (game.board[row][col] == COMPUTER ? yellow_background_red_text : yellow_background_green_text) << game.board[row][col] << end_color << " | ";
-            }
-            else cout << (game.board[row][col] == COMPUTER ? red : green) << game.board[row][col] << end_color << " | ";
+            } else
+                cout << (game.board[row][col] == COMPUTER ? red : green) << game.board[row][col] << end_color << " | ";
         }
         cout << "\n";
     }
@@ -358,7 +347,7 @@ double Util::CalculateUCB(Node &node) {
     if (node.visited == 0)
         return INT_MAX;
 
-    double C = sqrt(2);
+    double C = 200;
     return (node.total + C * (sqrt((double)(2 * log((double)node.parent->visited)) / (double)node.visited)));
 }
 
