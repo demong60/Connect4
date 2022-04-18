@@ -6,13 +6,12 @@ Game MonteCarlo(bool who_plays);
 Game MonteCarlo_MinMaxAB(bool who_plays);
 void test_ab_vs_mcts(bool debug, int tries);
 
-
 using std::chrono::duration;
 using std::chrono::duration_cast;
 using std::chrono::high_resolution_clock;
 using std::chrono::milliseconds;
 
-/* int main() {
+int main() {
     srand(time(NULL));
 
     int cl = system("clear");
@@ -63,73 +62,70 @@ using std::chrono::milliseconds;
         vector<pair<int, int>> winning_positions = Util::GetWinSegment(game, game.move_played);
         Util::PrintVictoriousGame(game);
         char VICTOR = game.board[game.positions_played[game.move_played]][game.move_played];
-        if(VICTOR == 'X'){
+        if (VICTOR == 'X') {
             cout << (algo == 3 ? "MCTS won" : "COMPUTER won") << '\n';
-        }
-        else{
+        } else {
             cout << (algo == 3 ? "Alpha-beta won" : "YOU WIN!!!") << '\n';
         }
-    } else cout << "EMPATE\n";
-} */
-
-int main(){ // This main is just for testing
-    // test_ab_vs_mcts(true, 2); // To check if it's doing it right
-    test_ab_vs_mcts(false, 100); // Put true to see the games
+    } else
+        cout << "EMPATE\n";
 }
 
-void test_ab_vs_mcts(bool debug, int tries){ // ERASE THIS, just for statistics
-    int abp = 0, mcts = 0;
-    bool mcts_starting = true;
-    for(int i=0; i<tries; ++i){
-        bool who_plays = mcts_starting;
+// int main(){ // This main is just for testing
+//     // test_ab_vs_mcts(true, 2); // To check if it's doing it right
+//     test_ab_vs_mcts(false, 100); // Put true to see the games
+// }
 
-        Game game;
-        game.depth = 0;
-        game.counter = 0;
-        game.move_played = 3;
+// void test_ab_vs_mcts(bool debug, int tries){ // ERASE THIS, just for statistics
+//     int abp = 0, mcts = 0;
+//     bool mcts_starting = true;
+//     for(int i=0; i<tries; ++i){
+//         bool who_plays = mcts_starting;
 
-        int last_played;
-        shared_ptr<Node> root = make_shared<Node>(game, who_plays == 0 ? PLAYER : COMPUTER);
+//         Game game;
+//         game.depth = 0;
+//         game.counter = 0;
+//         game.move_played = 3;
 
-        do {
-            if(debug) Util::PrintGame(root->game);
-            if (who_plays) {
-                if(debug) cout << "MinMax playing\n";
-                last_played = Algorithms::MinMaxWithAlphaBetaPruning(root->game);
-                if (root->game.counter == 0)  // For when the player starts
-                    Algorithms::Expand(root);
-            } else {
-                if(debug) cout << "MCTS playing...\n";
-                last_played = Algorithms::MonteCarloTreeSearch(root);
-            }
-            if(debug) sleep(1);
-            for (auto child : root->children) {
-                if (child->game.move_played == last_played) {
-                    root = child;
-                    root->parent = nullptr;
-                    break;
-                }
-            }
-            if(debug) Util::PrintGame(root->game);
-            who_plays = !who_plays;
-        } while (!Util::CheckForWin(root->game, root->game.move_played));
-        
-        if(Util::CheckForWin(root->game, root->game.move_played)){
-            vector<pair<int, int>> winning_positions = Util::GetWinSegment(root->game, root->game.move_played);
-            if(debug) Util::PrintVictoriousGame(root->game);
-            if(who_plays) ++mcts;
-            else ++abp;
+//         int last_played;
+//         shared_ptr<Node> root = make_shared<Node>(game, who_plays == 0 ? PLAYER : COMPUTER);
 
-            // cout << "ver: " << root->game.board[game.positions_played[root->game.move_played]][root->game.move_played] << '\n';
-            if(debug) sleep(2);
-        }
-    }
-    cout << "Alfa_beta won: " << abp << "/" << tries << '\n';
-    cout << "MCTS won: " << mcts << "/" << tries << '\n';
-}
+//         do {
+//             if(debug) Util::PrintGame(root->game);
+//             if (who_plays) {
+//                 if(debug) cout << "MinMax playing\n";
+//                 last_played = Algorithms::MinMaxWithAlphaBetaPruning(root->game);
+//                 if (root->game.counter == 0)  // For when the player starts
+//                     Algorithms::Expand(root);
+//             } else {
+//                 if(debug) cout << "MCTS playing...\n";
+//                 last_played = Algorithms::MonteCarloTreeSearch(root);
+//             }
+//             if(debug) sleep(1);
+//             for (auto child : root->children) {
+//                 if (child->game.move_played == last_played) {
+//                     root = child;
+//                     root->parent = nullptr;
+//                     break;
+//                 }
+//             }
+//             if(debug) Util::PrintGame(root->game);
+//             who_plays = !who_plays;
+//         } while (!Util::CheckForWin(root->game, root->game.move_played));
 
+//         if(Util::CheckForWin(root->game, root->game.move_played)){
+//             vector<pair<int, int>> winning_positions = Util::GetWinSegment(root->game, root->game.move_played);
+//             if(debug) Util::PrintVictoriousGame(root->game);
+//             if(who_plays) ++mcts;
+//             else ++abp;
 
-
+//             // cout << "ver: " << root->game.board[game.positions_played[root->game.move_played]][root->game.move_played] << '\n';
+//             if(debug) sleep(2);
+//         }
+//     }
+//     cout << "Alfa_beta won: " << abp << "/" << tries << '\n';
+//     cout << "MCTS won: " << mcts << "/" << tries << '\n';
+// }
 
 Game MinMax(bool who_plays) {
     int last_played;
@@ -245,7 +241,7 @@ Game AlphaBeta(bool who_plays) {
 
         Util::PrintGame(game);
         who_plays = !who_plays;
-    } while (!Util::CheckForWin(game, game.move_played)  && game.counter != 42);
+    } while (!Util::CheckForWin(game, game.move_played) && game.counter != 42);
 
     return game;
 }
@@ -280,7 +276,7 @@ Game MonteCarlo_MinMaxAB(bool who_plays) {
         }
         Util::PrintGame(root->game);
         who_plays = !who_plays;
-    } while (!Util::CheckForWin(root->game, root->game.move_played)  && game.counter != 42);
+    } while (!Util::CheckForWin(root->game, root->game.move_played) && game.counter != 42);
 
     return root->game;
 }

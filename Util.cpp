@@ -333,11 +333,7 @@ void Util::CreateChildren(Game &game, vector<Game> &children, char symbol) {
             children.push_back(child);
         }
     }
-    // for (int i = 0; i < WIDTH; i++) {
-    //     Game child = game;
-    //     if (MakeMove(i, child, symbol))
-    //         children.push_back(child);
-    // }
+
     Util::node_count += children.size();
 }
 

@@ -4,15 +4,17 @@ int Algorithms::MinMax(Game &game) {
     Util::node_count = 0;
     vector<Game> children;
     Util::CreateChildren(game, children, COMPUTER);
-    pair<int, int> ans = {INT_MIN, -1};
+
+    int best_value = INT_MIN;
+    int best_move;
     for (auto child : children) {
         int res = Algorithms::MinValue(child, MAX_DEPTH);
-        if (res > ans.first) {
-            ans.first = res;
-            ans.second = child.move_played;
+        if (res > best_value) {
+            best_value = res;
+            best_move = child.move_played;
         }
     }
-    return ans.second;
+    return best_move;
 }
 
 int Algorithms::MaxValue(Game &game, int depth) {
@@ -122,17 +124,21 @@ int Algorithms::MonteCarloTreeSearch(shared_ptr<Node> root) {
 int Algorithms::MinMaxWithAlphaBetaPruning(Game &game) {
     Util::node_count = 0;
     int alpha = INT_MIN, beta = INT_MAX;
+
     vector<Game> children;
     Util::CreateChildren(game, children, COMPUTER);
+
     pair<int, int> ans = {INT_MIN, -1};
+    int best_value = INT_MIN;
+    int best_move;
     for (auto child : children) {
         int res = Algorithms::MinValue(child, MAX_DEPTH_AB, alpha, beta);
-        if (res > ans.first) {
-            ans.first = res;
-            ans.second = child.move_played;
+        if (res > best_value) {
+            best_value = res;
+            best_move = child.move_played;
         }
     }
-    return ans.second;
+    return best_move;
 }
 
 int Algorithms::MaxValue(Game &game, int depth, int alpha, int beta) {
@@ -141,18 +147,19 @@ int Algorithms::MaxValue(Game &game, int depth, int alpha, int beta) {
     if (Util::CheckForWin(game, game.move_played)) return -512;
     if (game.counter == 42) return 0;
 
-    int value = INT_MIN;
+    int max_eval = INT_MIN;
     vector<Game> children;
     Util::CreateChildren(game, children, COMPUTER);
     for (Game child : children) {
-        int cur = MinValue(child, depth - 1, alpha, beta);
+        int eval = MinValue(child, depth - 1, alpha, beta);
 
-        if (cur > value) value = cur;
-        if (cur >= beta) return beta;
-        if (cur > alpha) alpha = cur;
+        max_eval = max(eval, max_eval);
+        alpha = max(alpha, eval);
+        if (beta <= alpha)
+            break;
     }
 
-    return value;
+    return max_eval;
 }
 
 int Algorithms::MinValue(Game &game, int depth, int alpha, int beta) {
@@ -161,18 +168,19 @@ int Algorithms::MinValue(Game &game, int depth, int alpha, int beta) {
     if (Util::CheckForWin(game, game.move_played)) return 512;
     if (game.counter == 42) return 0;
 
-    int value = INT_MAX;
+    int min_eval = INT_MAX;
     vector<Game> children;
     Util::CreateChildren(game, children, PLAYER);
     for (Game child : children) {
-        int cur = MaxValue(child, depth - 1, alpha, beta);
+        int eval = MaxValue(child, depth - 1, alpha, beta);
 
-        if (cur < value) value = cur;
-        if (cur <= alpha) return alpha;
-        if (cur < beta) beta = cur;
+        min_eval = min(eval, min_eval);
+        beta = min(beta, eval);
+        if (beta <= alpha)
+            break;
     }
 
-    return value;
+    return min_eval;
 }
 
 int Algorithms::GetTreeSize(shared_ptr<Node> node) {
