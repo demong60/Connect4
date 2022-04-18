@@ -67,7 +67,7 @@ int main() {
         else{
             cout << (algo == 3 ? "Alpha-beta won" : "YOU WIN!!!") << '\n';
         }
-    }
+    } else cout << "EMPATE\n";
 }
 
 Game MinMax(bool who_plays) {
@@ -101,7 +101,7 @@ Game MinMax(bool who_plays) {
 
         Util::PrintGame(game);
         who_plays = !who_plays;
-    } while (!Util::CheckForWin(game, game.move_played));
+    } while (!Util::CheckForWin(game, game.move_played) && game.counter != 42);
 
     return game;
 }
@@ -148,7 +148,7 @@ Game MonteCarlo(bool who_plays) {
         Util::PrintGame(root->game);
 
         who_plays = !who_plays;
-    } while (!Util::CheckForWin(root->game, root->game.move_played));
+    } while (!Util::CheckForWin(root->game, root->game.move_played) && game.counter != 42);
 
     return root->game;
 }
@@ -184,7 +184,7 @@ Game AlphaBeta(bool who_plays) {
 
         Util::PrintGame(game);
         who_plays = !who_plays;
-    } while (!Util::CheckForWin(game, game.move_played));
+    } while (!Util::CheckForWin(game, game.move_played)  && game.counter != 42);
 
     return game;
 }
@@ -219,7 +219,7 @@ Game MonteCarlo_MinMaxAB(bool who_plays) {
         }
         Util::PrintGame(root->game);
         who_plays = !who_plays;
-    } while (!Util::CheckForWin(root->game, root->game.move_played));
+    } while (!Util::CheckForWin(root->game, root->game.move_played)  && game.counter != 42);
 
     return root->game;
 }
