@@ -1,6 +1,7 @@
 #include "Algorithms.h"
 
 int Algorithms::MinMax(Game &game) {
+    Util::node_count = 0;
     vector<Game> possible_moves;
     Util::CreateChildren(game, possible_moves, COMPUTER);
 
@@ -96,7 +97,7 @@ int Algorithms::MonteCarloTreeSearch(shared_ptr<Node> root) {
             Algorithms::Expand(node);
 
         if (node->children.size() > 0)
-            node = node->children[0];
+            node = node->children[rand() % node->children.size()];
 
         int value = Algorithms::Simulate(*node);
         Algorithms::Backpropagate(*node, value);
@@ -114,13 +115,13 @@ int Algorithms::MonteCarloTreeSearch(shared_ptr<Node> root) {
 }
 
 int Algorithms::MinMaxWithAlphaBetaPruning(Game &game) {
+    Util::node_count = 0;
     int alpha = INT_MIN, beta = INT_MAX;
-    int MAX_ITER = 10;
     vector<Game> children;
     Util::CreateChildren(game, children, COMPUTER);
     pair<int, int> ans = {INT_MIN, -1};
     for (auto child : children) {
-        int res = Algorithms::MinValue(child, MAX_ITER, alpha, beta);
+        int res = Algorithms::MinValue(child, MAX_DEPTH_AB, alpha, beta);
         if (res > ans.first) {
             ans.first = res;
             ans.second = child.move_played;
@@ -132,7 +133,7 @@ int Algorithms::MinMaxWithAlphaBetaPruning(Game &game) {
 int Algorithms::MaxValue(Game &game, int depth, int alpha, int beta) {
     if (depth == 0)
         return Util::UtilityFunction(game, game.move_played);
-    if (Util::CheckForWin(game, game.move_played)) return -512 + game.depth;
+    if (Util::CheckForWin(game, game.move_played)) return -512;
     if (game.counter == 42) return 0;
 
     int value = INT_MIN;
@@ -152,7 +153,7 @@ int Algorithms::MaxValue(Game &game, int depth, int alpha, int beta) {
 int Algorithms::MinValue(Game &game, int depth, int alpha, int beta) {
     if (depth == 0)
         return Util::UtilityFunction(game, game.move_played);
-    if (Util::CheckForWin(game, game.move_played)) return 512 - game.depth;
+    if (Util::CheckForWin(game, game.move_played)) return 512;
     if (game.counter == 42) return 0;
 
     int value = INT_MAX;
@@ -167,4 +168,13 @@ int Algorithms::MinValue(Game &game, int depth, int alpha, int beta) {
     }
 
     return value;
+}
+
+int Algorithms::GetTreeSize(shared_ptr<Node> node) {
+    long long total = 1;
+    for (shared_ptr<Node> child : node->children) {
+        total += GetTreeSize(child);
+    }
+
+    return total;
 }

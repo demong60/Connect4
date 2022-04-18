@@ -33,4 +33,6 @@ void Expand(shared_ptr<Node> node);
 void Backpropagate(Node &node, int result);
 shared_ptr<Node> Select(shared_ptr<Node> root);
 
+int GetTreeSize(shared_ptr<Node> node);
+
 }  // namespace Algorithms

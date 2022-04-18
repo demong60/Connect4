@@ -16,7 +16,7 @@ using namespace std;
 #include "Node.h"
 
 namespace Util {
-
+extern int node_count;
 int CountSegments(array<array<char, WIDTH>, HEIGHT> &board, pair<int, int> pos, pair<int, int> dir);
 bool MakeMove(int col, Game &game, char symbol);
 void PrintGame(Game &game);

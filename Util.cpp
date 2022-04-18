@@ -4,6 +4,7 @@ pair<int, int> move_down_right = {1, 1};  // Percorrer a diagonal no sentido sud
 pair<int, int> move_up_right = {-1, 1};   // Percorrer a diagonal no sentido nordeste
 pair<int, int> move_right = {0, 1};       // Percorrer uma linha no sentido este
 pair<int, int> move_down = {1, 0};        // Percorrer uma coluna no sentido sul
+int Util::node_count = 0;
 
 int Util::GetValueForSegment(pair<int, int> segment_results) {
     array<int, 3> map = {1, 10, 50};
@@ -337,6 +338,7 @@ void Util::CreateChildren(Game &game, vector<Game> &children, char symbol) {
     //     if (MakeMove(i, child, symbol))
     //         children.push_back(child);
     // }
+    Util::node_count += children.size();
 }
 
 char Util::GetNextSymbol(char symbol) {
@@ -347,7 +349,7 @@ double Util::CalculateUCB(Node &node) {
     if (node.visited == 0)
         return INT_MAX;
 
-    double C = sqrt(2);
+    double C = 20;
     return (node.total + C * (sqrt((double)(2 * log((double)node.parent->visited)) / (double)node.visited)));
 }
 
