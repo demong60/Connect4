@@ -60,6 +60,13 @@ int main() {
     if (Util::CheckForWin(game, game.move_played)) {
         vector<pair<int, int>> winning_positions = Util::GetWinSegment(game, game.move_played);
         Util::PrintVictoriousGame(game);
+        char VICTOR = game.board[game.positions_played[game.move_played]][game.move_played];
+        if(VICTOR == 'X'){
+            cout << (algo == 3 ? "MCTS won" : "COMPUTER won") << '\n';
+        }
+        else{
+            cout << (algo == 3 ? "Alpha-beta won" : "YOU WIN!!!") << '\n';
+        }
     }
 }
 
@@ -194,7 +201,7 @@ Game MonteCarlo_MinMaxAB(bool who_plays) {
     do {
         Util::PrintGame(root->game);
         if (who_plays) {
-            cout << "MinMax playing\n";
+            cout << "MinMax Alpha-beta playing\n";
             last_played = Algorithms::MinMaxWithAlphaBetaPruning(root->game);
             if (root->game.counter == 0)  // For when the player starts
                 Algorithms::Expand(root);
