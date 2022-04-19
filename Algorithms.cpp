@@ -20,7 +20,7 @@ int Algorithms::MinMax(Game &game) {
 int Algorithms::MaxValue(Game &game, int depth) {
     if (depth == 0)
         return Util::UtilityFunction(game, game.move_played);
-    if (Util::CheckForWin(game, game.move_played)) return -512;
+    if (Util::CheckForWin(game, game.move_played)) return -MAX_SCORE;
     if (game.counter == 42) return 0;
 
     int value = INT_MIN;
@@ -38,7 +38,7 @@ int Algorithms::MaxValue(Game &game, int depth) {
 int Algorithms::MinValue(Game &game, int depth) {
     if (depth == 0)
         return Util::UtilityFunction(game, game.move_played);
-    if (Util::CheckForWin(game, game.move_played)) return 512;
+    if (Util::CheckForWin(game, game.move_played)) return MAX_SCORE;
     if (game.counter == 42) return 0;
 
     int value = INT_MAX;
@@ -128,14 +128,15 @@ int Algorithms::MinMaxWithAlphaBetaPruning(Game &game) {
     vector<Game> children;
     Util::CreateChildren(game, children, COMPUTER);
 
-    int best_value = INT_MIN;
+    int max_eval = INT_MIN;
     int best_move;
     for (auto child : children) {
-        int res = Algorithms::MinValue(child, MAX_DEPTH_AB, alpha, beta);
-        if (res > best_value) {
-            best_value = res;
+        int current_eval = MinValue(child, MAX_DEPTH_AB, alpha, beta);
+        if (current_eval > max_eval) {
+            max_eval = current_eval;
             best_move = child.move_played;
         }
+        alpha = max(alpha, max_eval);
     }
     return best_move;
 }
@@ -143,7 +144,7 @@ int Algorithms::MinMaxWithAlphaBetaPruning(Game &game) {
 int Algorithms::MaxValue(Game &game, int depth, int alpha, int beta) {
     if (depth == 0)
         return Util::UtilityFunction(game, game.move_played);
-    if (Util::CheckForWin(game, game.move_played)) return -512;
+    if (Util::CheckForWin(game, game.move_played)) return -MAX_SCORE;
     if (game.counter == 42) return 0;
 
     int max_eval = INT_MIN;
@@ -162,7 +163,7 @@ int Algorithms::MaxValue(Game &game, int depth, int alpha, int beta) {
 int Algorithms::MinValue(Game &game, int depth, int alpha, int beta) {
     if (depth == 0)
         return Util::UtilityFunction(game, game.move_played);
-    if (Util::CheckForWin(game, game.move_played)) return 512;
+    if (Util::CheckForWin(game, game.move_played)) return MAX_SCORE;
     if (game.counter == 42) return 0;
 
     int min_eval = INT_MAX;

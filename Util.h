@@ -9,7 +9,7 @@ using namespace std;
 
 #define MAX_DEPTH 7
 #define MAX_DEPTH_AB 10
-#define MAX_SCORE 512
+#define MAX_SCORE 10000
 
 #include "Game.h"
 #include "Algorithms.h"
