@@ -128,7 +128,6 @@ int Algorithms::MinMaxWithAlphaBetaPruning(Game &game) {
     vector<Game> children;
     Util::CreateChildren(game, children, COMPUTER);
 
-    pair<int, int> ans = {INT_MIN, -1};
     int best_value = INT_MIN;
     int best_move;
     for (auto child : children) {
@@ -151,12 +150,10 @@ int Algorithms::MaxValue(Game &game, int depth, int alpha, int beta) {
     vector<Game> children;
     Util::CreateChildren(game, children, COMPUTER);
     for (Game child : children) {
-        int eval = MinValue(child, depth - 1, alpha, beta);
-
-        max_eval = max(eval, max_eval);
-        alpha = max(alpha, eval);
-        if (beta <= alpha)
-            break;
+        max_eval = max(max_eval, MinValue(child, depth - 1, alpha, beta));
+        if (max_eval >= beta)
+            return max_eval;
+        alpha = max(alpha, max_eval);
     }
 
     return max_eval;
@@ -172,12 +169,10 @@ int Algorithms::MinValue(Game &game, int depth, int alpha, int beta) {
     vector<Game> children;
     Util::CreateChildren(game, children, PLAYER);
     for (Game child : children) {
-        int eval = MaxValue(child, depth - 1, alpha, beta);
-
-        min_eval = min(eval, min_eval);
-        beta = min(beta, eval);
-        if (beta <= alpha)
-            break;
+        min_eval = min(min_eval, MaxValue(child, depth - 1, alpha, beta));
+        if (min_eval <= alpha)
+            return min_eval;
+        beta = min(beta, min_eval);
     }
 
     return min_eval;
