@@ -147,7 +147,12 @@ Game MinMax(bool who_plays) {
         if (who_plays) {
             cout << "Player's turn\n";
             cin >> last_played;
-            Util::MakeMove(last_played, game, PLAYER);
+            if (!Util::MakeMove(last_played, game, PLAYER)) {
+                do {
+                    cout << "Movimento ilegal. Por favor escolha um movimento possivel: ";
+                    cin >> last_played;
+                } while (!Util::MakeMove(last_played, game, PLAYER));
+            }
         } else {
             cout << "Computer playing...\n";
             t1 = high_resolution_clock::now();
@@ -183,10 +188,18 @@ Game MonteCarlo(bool who_plays) {
             cout << "Move: " << root->game.counter << " " << Algorithms::GetTreeSize(root) << " " << ms_double.count() << "\n";
         }
         if (who_plays) {
-            cout << "Player's turn\n";
-            cin >> last_played;
             if (root->game.counter == 0)  // For when the player starts
                 Algorithms::Expand(root);
+
+            cout << "Player's turn\n";
+            cin >> last_played;
+            if (!Util::MakeMove(last_played, root->game, PLAYER)) {
+                do {
+                    cout << "Movimento ilegal. Por favor escolha um movimento possivel: ";
+                    cin >> last_played;
+                } while (!Util::MakeMove(last_played, root->game, PLAYER));
+            }
+
         } else {
             cout << "Computer playing...\n";
 
@@ -229,8 +242,12 @@ Game AlphaBeta(bool who_plays) {
         if (who_plays) {
             cout << "Player's turn\n";
             cin >> last_played;
-            Util::MakeMove(last_played, game, PLAYER);
-            game.move_played = last_played;
+            if (!Util::MakeMove(last_played, game, PLAYER)) {
+                do {
+                    cout << "Movimento ilegal. Por favor escolha um movimento possivel: ";
+                    cin >> last_played;
+                } while (!Util::MakeMove(last_played, game, PLAYER));
+            }
         } else {
             cout << "Computer playing...\n";
             t1 = high_resolution_clock::now();

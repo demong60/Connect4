@@ -136,7 +136,6 @@ int Algorithms::MinMaxWithAlphaBetaPruning(Game &game) {
             max_eval = current_eval;
             best_move = child.move_played;
         }
-        alpha = max(alpha, max_eval);
     }
     return best_move;
 }
