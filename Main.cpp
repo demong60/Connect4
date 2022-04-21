@@ -3,7 +3,6 @@
 Game MinMax(bool who_plays);
 Game AlphaBeta(bool who_plays);
 Game MonteCarlo(bool who_plays);
-Game MonteCarlo_MinMaxAB(bool who_plays);
 void test_ab_vs_mcts(bool debug, int tries);
 
 using std::chrono::duration;
@@ -19,22 +18,15 @@ int main() {
     cout << "Select the algorithm the bot will use: \n"
          << "(0) MiniMax\n"
          << "(1) MiniMax with Alpha-Beta Pruning\n"
-         << "(2) Monte Carlo Tree Search\n"
-         << "(3) MCTS vs MiniMax with Alpha-Beta Pruning\n";
+         << "(2) Monte Carlo Tree Search\n";
     int algo = 0;
     cin >> algo;
 
     cl = system("clear");
 
-    if (algo != 3)
-        cout
-            << "Select who goes first:\n"
-            << "(0) Computer\n"
-            << "(1) Player\n";
-    else
-        cout << "Select who goes first:\n"
-             << "(0) Monte Carlo Tree Search\n"
-             << "(1) Min-Max with Alpha-Beta Pruning\n";
+    cout << "Select who goes first:\n"
+         << "(0) Computer\n"
+         << "(1) Player\n";
 
     bool who_plays = false;  // true = PLAYER   ||   false = COMPUTER
     cin >> who_plays;
@@ -49,9 +41,6 @@ int main() {
             break;
         case 2:
             game = MonteCarlo(who_plays);
-            break;
-        case 3:
-            game = MonteCarlo_MinMaxAB(who_plays);
             break;
         default:
             game = MinMax(who_plays);
@@ -71,62 +60,6 @@ int main() {
         cout << "EMPATE\n";
 }
 
-// int main(){ // This main is just for testing
-//     // test_ab_vs_mcts(true, 2); // To check if it's doing it right
-//     test_ab_vs_mcts(false, 100); // Put true to see the games
-// }
-
-// void test_ab_vs_mcts(bool debug, int tries){ // ERASE THIS, just for statistics
-//     int abp = 0, mcts = 0;
-//     bool mcts_starting = true;
-//     for(int i=0; i<tries; ++i){
-//         bool who_plays = mcts_starting;
-
-//         Game game;
-//         game.depth = 0;
-//         game.counter = 0;
-//         game.move_played = 3;
-
-//         int last_played;
-//         shared_ptr<Node> root = make_shared<Node>(game, who_plays == 0 ? PLAYER : COMPUTER);
-
-//         do {
-//             if(debug) Util::PrintGame(root->game);
-//             if (who_plays) {
-//                 if(debug) cout << "MinMax playing\n";
-//                 last_played = Algorithms::MinMaxWithAlphaBetaPruning(root->game);
-//                 if (root->game.counter == 0)  // For when the player starts
-//                     Algorithms::Expand(root);
-//             } else {
-//                 if(debug) cout << "MCTS playing...\n";
-//                 last_played = Algorithms::MonteCarloTreeSearch(root);
-//             }
-//             if(debug) sleep(1);
-//             for (auto child : root->children) {
-//                 if (child->game.move_played == last_played) {
-//                     root = child;
-//                     root->parent = nullptr;
-//                     break;
-//                 }
-//             }
-//             if(debug) Util::PrintGame(root->game);
-//             who_plays = !who_plays;
-//         } while (!Util::CheckForWin(root->game, root->game.move_played));
-
-//         if(Util::CheckForWin(root->game, root->game.move_played)){
-//             vector<pair<int, int>> winning_positions = Util::GetWinSegment(root->game, root->game.move_played);
-//             if(debug) Util::PrintVictoriousGame(root->game);
-//             if(who_plays) ++mcts;
-//             else ++abp;
-
-//             // cout << "ver: " << root->game.board[game.positions_played[root->game.move_played]][root->game.move_played] << '\n';
-//             if(debug) sleep(2);
-//         }
-//     }
-//     cout << "Alfa_beta won: " << abp << "/" << tries << '\n';
-//     cout << "MCTS won: " << mcts << "/" << tries << '\n';
-// }
-
 Game MinMax(bool who_plays) {
     int last_played;
 
@@ -142,14 +75,14 @@ Game MinMax(bool who_plays) {
     do {
         if (who_plays) {
             ms_double = t2 - t1;
-            cout << "Move: " << game.counter << " " << Util::node_count << " " << ms_double.count() << "\n";
+            cout << "Move " << game.counter << " created " << Util::node_count << " nodes and took " << ms_double.count() << " milliseconds.\n";
         }
         if (who_plays) {
             cout << "Player's turn\n";
             cin >> last_played;
             if (!Util::MakeMove(last_played, game, PLAYER)) {
                 do {
-                    cout << "Movimento ilegal. Por favor escolha um movimento possivel: ";
+                    cout << "Ilegal Move. Please choose a possible: ";
                     cin >> last_played;
                 } while (!Util::MakeMove(last_played, game, PLAYER));
             }
@@ -185,7 +118,7 @@ Game MonteCarlo(bool who_plays) {
     do {
         if (who_plays) {
             ms_double = t2 - t1;
-            cout << "Move: " << root->game.counter << " " << Algorithms::GetTreeSize(root) << " " << ms_double.count() << "\n";
+            cout << "Move " << game.counter << " created " << Util::node_count << " nodes and took " << ms_double.count() << " milliseconds.\n";
         }
         if (who_plays) {
             if (root->game.counter == 0)  // For when the player starts
@@ -195,7 +128,7 @@ Game MonteCarlo(bool who_plays) {
             cin >> last_played;
             if (!Util::MakeMove(last_played, root->game, PLAYER)) {
                 do {
-                    cout << "Movimento ilegal. Por favor escolha um movimento possivel: ";
+                    cout << "Ilegal Move. Please choose a possible: ";
                     cin >> last_played;
                 } while (!Util::MakeMove(last_played, root->game, PLAYER));
             }
@@ -237,14 +170,14 @@ Game AlphaBeta(bool who_plays) {
     do {
         if (who_plays) {
             ms_double = t2 - t1;
-            cout << "Move: " << game.counter << " " << Util::node_count << " " << ms_double.count() << "\n";
+            cout << "Move " << game.counter << " created " << Util::node_count << " nodes and took " << ms_double.count() << " milliseconds.\n";
         }
         if (who_plays) {
             cout << "Player's turn\n";
             cin >> last_played;
             if (!Util::MakeMove(last_played, game, PLAYER)) {
                 do {
-                    cout << "Movimento ilegal. Por favor escolha um movimento possivel: ";
+                    cout << "Ilegal Move. Please choose a possible: ";
                     cin >> last_played;
                 } while (!Util::MakeMove(last_played, game, PLAYER));
             }
@@ -261,39 +194,4 @@ Game AlphaBeta(bool who_plays) {
     } while (!Util::CheckForWin(game, game.move_played) && game.counter != 42);
 
     return game;
-}
-
-Game MonteCarlo_MinMaxAB(bool who_plays) {
-    Game game;
-    game.depth = 0;
-    game.counter = 0;
-    game.move_played = 3;
-
-    int last_played;
-    shared_ptr<Node> root = make_shared<Node>(game, who_plays == 0 ? PLAYER : COMPUTER);
-
-    do {
-        Util::PrintGame(root->game);
-        if (who_plays) {
-            cout << "MinMax Alpha-beta playing\n";
-            last_played = Algorithms::MinMaxWithAlphaBetaPruning(root->game);
-            if (root->game.counter == 0)  // For when the player starts
-                Algorithms::Expand(root);
-        } else {
-            cout << "MCTS playing...\n";
-            last_played = Algorithms::MonteCarloTreeSearch(root);
-        }
-
-        for (auto child : root->children) {
-            if (child->game.move_played == last_played) {
-                root = child;
-                root->parent = nullptr;
-                break;
-            }
-        }
-        Util::PrintGame(root->game);
-        who_plays = !who_plays;
-    } while (!Util::CheckForWin(root->game, root->game.move_played) && game.counter != 42);
-
-    return root->game;
 }
